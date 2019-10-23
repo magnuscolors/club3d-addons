@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "product_trade_info_additional",
+    'name': "club3d_product_trade_info_additional",
 
     'summary': """
         Additional fields on product""",
