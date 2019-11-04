@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import fields, models, api, _
-# from odoo.tools.float_utils import float_compare
 
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
@@ -85,9 +84,6 @@ class AccountInvoice(models.Model):
 
     @api.multi
     def write(self, vals):
-        import pdb;
-        # pdb.set_trace();
-        print ('------write-----------',self.env.context.get('active_ids'))
         res = super(AccountInvoice, self).write(vals)
         if vals.get('state', False):
             for inv in self:
@@ -98,9 +94,6 @@ class AccountInvoice(models.Model):
 
     @api.model
     def create(self, vals):
-        import pdb;
-        # pdb.set_trace();
-        print('--------create---------', self.env.context.get('active_ids'))
         res = super(AccountInvoice, self).create(vals)
         if vals.get('state', False):
             if res.type in ('out_invoice') and res.invoice_line_ids:
