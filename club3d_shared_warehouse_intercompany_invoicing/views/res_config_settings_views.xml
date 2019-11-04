@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.club3d.form.inherit.account</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="41"/>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//div[@id='invoicing_settings']" position="after">
+                    <h2>Intercompany Invoices</h2>
+                        <div class="row mt16 o_settings_container" id="intercompany_invoicing_settings">
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="all_customer_accounts"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <label for="all_customer_accounts"/>
+                                    <div class="text-muted">
+                                        Intercompany supplier invoice received from this company
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="auto_validate"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <label for="auto_validate"/>
+                                    <div class="text-muted">
+                                        Intercompany auto validate customer/supplier invoices
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="all_vendor_accounts"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <label for="all_vendor_accounts"/>
+                                    <div class="text-muted">
+                                        Intercompany customer invoice received from this company
+                                    </div>
+                                </div>
+                            </div>-->
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <label string="Enter Inter-Company"/>
+                                    <span title="Select company here."/>
+                                    <div class="text-muted">
+                                        Intercompany customer/supplier invoice received from
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Company" class="col-md-3 o_light_label"/>
+                                            <field name="intercompany_id" options="{'no_create_edit': True, 'no_open': True}" attrs="{'required':[('all_customer_accounts', '=', True)]}"/>
+                                            <!--<field name="intercompany_id" options="{'no_create_edit': True, 'no_open': True}" attrs="{'required':['|',('all_customer_accounts', '=', True), ('all_vendor_accounts', '=', True)]}"/>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6 o_setting_box">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <label string="Enter Invoice status"/>
+                                    <span title="Select state here."/>
+                                    <div class="text-muted">
+                                        Intercompany customer/supplier invoice trigger on selected status
+                                    </div>
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Status" class="col-md-3 o_light_label"/>
+                                            <field name="state" attrs="{'required':[('intercompany_id', '!=', False)]}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
