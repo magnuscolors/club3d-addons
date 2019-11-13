@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="view_move_tree" model="ir.ui.view">
+      <field name="name">Add move type column</field>
+      <field name="model">stock.move</field>
+      <field name="inherit_id" ref="stock.view_move_tree"/>
+      <field name="arch" type="xml">
+          <field name="state" position="before">
+              <field name="price_unit"/>
+              <field name="quantity_done"/>
+              <field name="value"/>
+          </field>
+      </field>
+  </record>
+
+</odoo>
