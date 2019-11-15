@@ -99,22 +99,22 @@ class StockMove(models.Model):
     def fetch_company_dependent_values(self):
         sudo_prop = self.env['ir.property'].sudo().with_context(force_company=self.company_id.id)
 
-        journal = sudo_prop.get('property_stock_journal','product.category', 'product.category,%s' % self.product_id.categ_id.id)
+        journal = sudo_prop.get('property_stock_journal','product.category', 'product.category,%s' % self.product_id.categ_id.id).id
         if not journal:
             journal = sudo_prop.get('property_stock_journal','product.category').id
 
         acc_src = sudo_prop.get('property_stock_account_input_categ_id', 'product.category',
-                                      'product.category,%s' % self.product_id.categ_id.id)
+                                      'product.category,%s' % self.product_id.categ_id.id).id
         if not acc_src:
             acc_src = sudo_prop.get('property_stock_account_input_categ_id', 'product.category').id
 
         acc_dest = sudo_prop.get('property_stock_account_output_categ_id', 'product.category',
-                                'product.category,%s' % self.product_id.categ_id.id)
+                                'product.category,%s' % self.product_id.categ_id.id).id
         if not acc_dest:
             acc_dest = sudo_prop.get('property_stock_account_output_categ_id', 'product.category').id
 
         acc_valuation = sudo_prop.get('property_stock_valuation_account_id', 'product.category',
-                                    'product.category,%s' % self.product_id.categ_id.id)
+                                    'product.category,%s' % self.product_id.categ_id.id).id
         if not acc_valuation:
             acc_valuation = sudo_prop.get('property_stock_valuation_account_id', 'product.category').id
 
