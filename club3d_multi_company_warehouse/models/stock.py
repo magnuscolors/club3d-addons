@@ -41,7 +41,7 @@ class StockMove(models.Model):
         return res
 
     def _create_account_move_line(self, credit_account_id, debit_account_id, journal_id):
-        if self.picking_id.sale_id.company_id != self.picking_id.company_id:
+        if self.picking_id and self.picking_id.sale_id and self.picking_id.sale_id.company_id != self.picking_id.company_id:
             self.ensure_one()
             AccountMove = self.env['account.move']
             quantity = self.env.context.get('forced_quantity', self.product_qty)
@@ -130,6 +130,6 @@ class StockMove(models.Model):
         self.ensure_one()
         journal_id, acc_src, acc_dest, acc_valuation = \
             super(StockMove, self)._get_accounting_data_for_valuation()
-        if self.picking_id.sale_id.company_id != self.picking_id.company_id:
+        if self.picking_id and self.picking_id.sale_id and self.picking_id.sale_id.company_id != self.picking_id.company_id:
             journal_id, acc_src, acc_dest, acc_valuation = self.fetch_company_dependent_values()
         return journal_id, acc_src, acc_dest, acc_valuation
