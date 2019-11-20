@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.club3d.form.inherit.account</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="41"/>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='invoicing_settings']" position="after">
+                    <h2>Freight Account</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <label string="Freight Cost Account"/>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific."/>
+                                <div class="text-muted">
+                                    Freight cost/debit Account
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="freight_cost_account" class="col-md-3 o_light_label"/>
+                                        <field name="freight_cost_account" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <label string="Freight Reservation Account"/>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific."/>
+                                <div class="text-muted">
+                                    Freight reservation/debit Account
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="freight_reservation_account" class="col-md-3 o_light_label"/>
+                                        <field name="freight_reservation_account" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-md-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <label string="Freight Product"/>
+                                <span title="Values set here are company-specific."/>
+                                <div class="text-muted">
+                                    Freight product from this company
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label for="freight_product" class="col-md-3 o_light_label"/>
+                                        <field name="freight_product" options="{'no_create_edit': True, 'no_open': True}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
