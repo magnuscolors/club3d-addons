@@ -1,0 +1,41 @@
+<odoo>
+    <data>
+
+        <record id="view_invoice_line_tree" model="ir.ui.view">
+            <field name="name">account.invoice.line.tree</field>
+            <field name="model">account.invoice.line</field>
+            <field name="inherit_id" ref="account.view_invoice_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="invoice_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="action_invoice_lines_view_pivot" model="ir.ui.view">
+            <field name="name">Customer Invoice Lines Pivot</field>
+            <field name="model">account.invoice.line</field>
+            <field name="arch" type="xml">
+                <pivot string="Invoice Lines" display_quantity="true">
+                    <field name="invoice_id" type="row"/>
+                    <field name="partner_id" type="col"/>
+                    <field name="price_subtotal" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="action_invoice_lines" model="ir.actions.act_window">
+            <field name="name">Customer Invoice Lines</field>
+            <field name="res_model">account.invoice.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field eval="False" name="view_id"/>
+            <field name="domain">[('invoice_type','=','out_invoice')]</field>
+            <field name="context">{'invoice_type':'out_invoice'}</field>
+        </record>
+
+        <menuitem action="action_invoice_lines" id="menu_action_invoice_lines" parent="account.menu_finance_receivables_documents" sequence="2"/>
+
+
+    </data>
+</odoo>
