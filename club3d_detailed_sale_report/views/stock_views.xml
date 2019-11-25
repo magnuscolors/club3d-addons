@@ -18,8 +18,20 @@
                 <field name="product_uom_qty" position="before">
                     <field name="partner_id"/>
                 </field>
+
             </field>
-      </record>
+        </record>
+
+        <record id="view_move_tree" model="ir.ui.view">
+            <field name="name">stock.move.club3d.sale</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="club3d_multi_company_warehouse.view_move_tree"/>
+            <field name="arch" type="xml">
+                <field name="quantity_done" position="replace">
+                    <field name="done_qty"/>
+                </field>
+            </field>
+        </record>
 
     </data>
 </odoo>
