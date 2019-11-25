@@ -15,7 +15,7 @@ class StockMove(models.Model):
                 move.done_qty = -move.done_qty
 
 
-    done_qty = fields.Float('Quantity Done456', compute='_qty_done_compute', digits=dp.get_precision('Product Unit of Measure'), store=True)
+    done_qty = fields.Float('Quantity Done', compute='_qty_done_compute', digits=dp.get_precision('Product Unit of Measure'), store=True)
 
     @api.model
     def create(self, vals):
