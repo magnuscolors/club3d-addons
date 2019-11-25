@@ -75,23 +75,23 @@ class StockMove(models.Model):
     def _action_done(self):
         res = super(StockMove, self)._action_done()
         IrDefault = self.env['ir.default'].sudo()
-
-        freight_product = IrDefault.get('res.company', "freight_product", company_id=self.company_id.id)
-        freight_product = self.env['product.product'].sudo().browse(freight_product)
-
-        if not freight_product.categ_id.automate_freight_cal:
-            return res
-
-        accounts_data = freight_product.product_tmpl_id.get_product_accounts()
-        journal_id = accounts_data['stock_journal'].id
-
-        freight_cost_account = IrDefault.get('res.company', "freight_cost_account", company_id=self.company_id.id)
-        freight_reservation_account = IrDefault.get('res.company', "freight_reservation_account", company_id=self.company_id.id)
-
         for move in res:
-            company_to = self._is_in() and self.mapped('move_line_ids.location_dest_id.company_id') or False
+            freight_product = IrDefault.get('res.company', "freight_product", company_id=move.company_id.id)
+            freight_product = self.env['product.product'].sudo().browse(freight_product)
+
+            if not freight_product.categ_id.automate_freight_cal:
+                continue
+
+            accounts_data = freight_product.product_tmpl_id.get_product_accounts()
+            journal_id = accounts_data['stock_journal'].id
+
+            freight_cost_account = IrDefault.get('res.company', "freight_cost_account", company_id=move.company_id.id)
+            freight_reservation_account = IrDefault.get('res.company', "freight_reservation_account", company_id=move.company_id.id)
+
+        # for move in res:
+            company_to = move._is_in() and move.mapped('move_line_ids.location_dest_id.company_id') or False
             if move._is_in():
-                if self.location_id and self.location_id.usage != 'customer':
-                    self.with_context(force_company=company_to.id)._create_freight_account_move_line(freight_reservation_account, freight_cost_account, journal_id, freight_product)
+                if move.location_id and move.location_id.usage != 'customer':
+                    move.with_context(force_company=company_to.id)._create_freight_account_move_line(freight_reservation_account, freight_cost_account, journal_id, freight_product)
         return res
 
