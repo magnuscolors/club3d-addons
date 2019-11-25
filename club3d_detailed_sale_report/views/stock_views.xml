@@ -18,7 +18,6 @@
                 <field name="product_uom_qty" position="before">
                     <field name="partner_id"/>
                 </field>
-
             </field>
         </record>
 
