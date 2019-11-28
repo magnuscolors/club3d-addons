@@ -14,7 +14,7 @@ class StockMove(models.Model):
         """
         self.ensure_one()
 
-        valuation_amount = (cost * freight_product.product_tmpl_id.categ_id.debit_freight_percentage)/100
+        valuation_amount = (cost * self.product_id.product_tmpl_id.categ_id.debit_freight_percentage)/100
 
         debit_value = self.company_id.currency_id.round(valuation_amount)
 
@@ -79,7 +79,7 @@ class StockMove(models.Model):
             freight_product = IrDefault.get('res.company', "freight_product", company_id=move.company_id.id)
             freight_product = self.env['product.product'].sudo().browse(freight_product)
 
-            if not freight_product.categ_id.automate_freight_cal:
+            if not move.product_id.categ_id.automate_freight_cal:
                 continue
 
             accounts_data = freight_product.product_tmpl_id.get_product_accounts()
