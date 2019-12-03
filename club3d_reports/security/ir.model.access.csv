@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_club3d_reports_club3d_reports,club3d_reports.club3d_reports,model_club3d_reports_club3d_reports,,1,0,0,0
