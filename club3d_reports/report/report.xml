@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="club3d_reports.report_assets_common" name="club3d_reports report assets common" inherit_id="web.report_assets_common">
+            <xpath expr="." position="inside">
+                <link href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;subset=latin-ext" rel="stylesheet"/>
+            </xpath>
+        </template>
+
+        <record id="paperformat_club3D_layout" model="report.paperformat">
+            <field name="name">European A4 - Club3D Layout</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">45</field>
+            <field name="margin_bottom">35</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">45</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <template id="external_layout_header">
+            <div class="header">
+                <div class="row">
+                  <div class="row" style="position:relative;font-size:3em;
+                                width:100%;height:100%;z-index:1000;padding-left:5px;">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.report_background_image1)"
+                                style="width:100%; display: block;"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article o_report_layout_standard">
+                <t t-raw="0"/>
+            </div>
+        </template>
+
+        <template id="web.external_layout">
+            <!-- Multicompany -->
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
+            </t>
+
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+
+            <t t-call="club3d_reports.external_layout_header"><t t-raw="0"/></t>
+
+            <!--<t t-if="company.external_report_layout == 'background'">
+                <t t-call="web.external_layout_background"><t t-raw="0"/></t>
+            </t>
+            <t t-if="company.external_report_layout == 'boxed'">
+                <t t-call="web.external_layout_boxed"><t t-raw="0"/></t>
+            </t>
+            <t t-if="company.external_report_layout == 'clean'">
+                <t t-call="web.external_layout_clean"><t t-raw="0"/></t>
+            </t>
+            <t t-if="company.external_report_layout in (False, 'standard')">
+                <t t-call="web.external_layout_standard"><t t-raw="0"/></t>
+            </t>-->
+        </template>
+
+        <report
+            id="sale.action_report_saleorder"
+            string="Quotation / Order"
+            model="sale.order"
+            report_type="qweb-pdf"
+            file="sale.report_saleorder"
+            name="sale.report_saleorder"
+            print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+            paperformat="club3d_reports.paperformat_club3D_layout"
+        />
+
+        <report
+            string="Delivery Slip"
+            id="stock.action_report_delivery"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            name="stock.report_deliveryslip"
+            file="stock.report_deliveryslip"
+            print_report_name="'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)"
+            paperformat="club3d_reports.paperformat_club3D_layout"
+        />
+
+    </data>
+</openerp>
