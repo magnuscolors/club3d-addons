@@ -6,7 +6,7 @@
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
             <field name="arch" type="xml">
                 <data>
-                    <xpath expr="//button[@name='%(action_account_invoice_payment)d']" position="attributes">
+                    <xpath expr="//button[@name='%(account.action_account_invoice_payment)d']" position="attributes">
                         <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
                     </xpath>
                 </data>
