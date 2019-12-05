@@ -7,3 +7,6 @@ class Company(models.Model):
 
     report_background_image1 = fields.Binary('Background Image for Report Frontpage',
             help='Set Background Image for Report Frontpage')
+
+    # header_image = fields.Binary('Header Image')
+    # footer_image = fields.Binary('Footer Image')
