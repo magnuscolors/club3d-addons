@@ -46,13 +46,13 @@
                             <div>
                                 <span><strong>Shipping Details:</strong></span>
                             </div>
-                            <br/>
                             <t t-if="o.carrier_id or o.sale_id.incoterm">
+                                <br/>
                                 <div>Conditions</div>
                                 <t t-if="o.carrier_id"> <div>Shipping Condition <span t-field="o.carrier_id"/></div></t>
                                 <t t-if="o.sale_id.incoterm"><div>Terms Of Delivery <span t-field="o.sale_id.incoterm"/></div></t>
+                                <br/>
                             </t>
-                            <br/>
                             <div>Weights (gross/net) - Volumes - Selections</div>
                             <div>Net Weight&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;<span t-field="o.weight"/> &#160; <span t-field="o.weight_uom_id"/> </div>
                             <div>Gross Weight&#160; &#160; &#160; &#160;  &#160; &#160;<span t-field="o.shipping_weight"/></div>
@@ -121,7 +121,8 @@
                         <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
                         <thead>
                             <tr>
-                                <th><strong>Product</strong></th>
+                                <th><strong>Item</strong></th>
+                                <th><strong>Material Description</strong></th>
                                 <th name="lot_serial" t-if="has_serial_number">
                                     Lot/Serial Number
                                 </th>
@@ -130,8 +131,9 @@
                         </thead>
                         <tbody>
                             <tr t-foreach="o.move_line_ids" t-as="move_line">
+                                <td><span t-esc="move_line_index+1"/></td>
                                 <td>
-                                    <span t-field="move_line.product_id"/>
+                                    <span t-field="move_line.move_id.name"/>
                                     <p t-if="o.picking_type_code == 'outgoing'">
                                         <span t-field="move_line.product_id.sudo().description_pickingout"/>
                                     </p>
@@ -159,7 +161,7 @@
                                   </td>
                                 </t>
                                 <td class="text-center">
-                                    <span t-field="move_line.qty_done"/>
+                                    <span t-esc="int(move_line.qty_done)"/>
                                     <span t-field="move_line.product_uom_id"/>
                                 </td>
                             </tr>
