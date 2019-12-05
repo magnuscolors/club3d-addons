@@ -111,7 +111,7 @@
                                     </p>
                                 </td>
                                 <td>
-                                    <span t-field="move.product_uom_qty"/>
+                                    <span t-esc="int(move.product_uom_qty)"/>
                                     <span t-field="move.product_uom"/>
                                 </td>
                             </tr>
