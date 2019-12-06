@@ -27,6 +27,7 @@
         'report/report.xml',
         'report/sale_report_templates.xml',
         'report/report_deliveryslip.xml',
+        'report/report_invoice.xml',
         'views/res_company_views.xml',
     ],
     # only loaded in demonstration mode
