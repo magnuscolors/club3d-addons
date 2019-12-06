@@ -105,5 +105,30 @@
             paperformat="club3d_reports.paperformat_club3D_layout"
         />
 
+        <report
+            id="account.account_invoices"
+            model="account.invoice"
+            string="Invoices"
+            report_type="qweb-pdf"
+            name="account.report_invoice_with_payments"
+            file="account.report_invoice_with_payments"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+            print_report_name="(object._get_printed_report_name())"
+            groups="account.group_account_invoice"
+            paperformat="club3d_reports.paperformat_club3D_layout"
+        />
+
+        <report
+            id="account.account_invoices_without_payment"
+            model="account.invoice"
+            string="Invoices without Payment"
+            report_type="qweb-pdf"
+            name="account.report_invoice"
+            file="account.report_invoice"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+            print_report_name="(object._get_printed_report_name())"
+            paperformat="club3d_reports.paperformat_club3D_layout"
+        />
+
     </data>
 </odoo>
