@@ -174,11 +174,11 @@
                                     <tr>
                                         <td><span t-esc="l_index+1"/></td>
                                         <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
-                                            <td><span t-field="l.product.default_code"/></td>
+                                            <td><span t-field="l.name"/></td>
                                         </t>
                                         <t t-if="env.context.get('proforma', False) or is_pro_forma">
                                             <td>
-                                                <span t-field="l.product_id"/>
+                                                <span t-field="l.product_id.default_code"/>
                                                 <br/>
                                                 <t t-set="dl" t-value="l.get_delivery_details()"/>
                                                 <t t-if="dl">
