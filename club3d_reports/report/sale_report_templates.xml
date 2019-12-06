@@ -13,6 +13,7 @@
                             </t>
                             <div t-field="doc.partner_id"
                                 t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True, "phone_icons": False}'/>
+                            <br/>
                             <div><strong>Contact: </strong><span t-field="doc.partner_id.name"/></div>
                         </div>
 <!--                        <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
@@ -43,6 +44,7 @@
                                      <t t-if="doc.incoterm">
                                         <div>Terms of delivery: <span t-field="doc.incoterm"/></div>
                                      </t>
+                                    <strong>Currency: </strong><span t-field="doc.currency_id"/>
                                 </div>
                             </t>
                         </t>
@@ -86,18 +88,8 @@
                                 </t>
                             </div>
                         </div>
-                        <t t-if="env.context.get('proforma', False) or is_pro_forma">
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <div class="pull-right">
-                                <strong>Currency: </strong><span t-field="doc.currency_id"/>
-                            </div>
-                        </t>
+                        <br/>
+                        <br/>
                     </div>
                 </div>
                 <br/>
