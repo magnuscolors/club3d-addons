@@ -37,14 +37,14 @@
                         <t t-if="env.context.get('proforma', False) or is_pro_forma">
                             <t t-if="doc.payment_term_id or doc.incoterm">
                                 <div class="mt8">
-                                    We deliver according to the following conditions
+                                    We deliver according to the following conditions:
                                      <t t-if="doc.payment_term_id">
-                                         <div>Terms of payment: <span t-field="doc.payment_term_id"/></div>
+                                         <div>    Terms of payment: <span t-field="doc.payment_term_id"/></div>
                                      </t>
                                      <t t-if="doc.incoterm">
-                                        <div>Terms of delivery: <span t-field="doc.incoterm"/></div>
+                                        <div>    Terms of delivery: <span t-field="doc.incoterm"/></div>
                                      </t>
-                                    <strong>Currency: </strong><span t-field="doc.currency_id"/>
+                                        <div>    Currency: <span t-field="doc.currency_id"/></div>
                                 </div>
                             </t>
                         </t>
