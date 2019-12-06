@@ -39,12 +39,12 @@
                                 <div class="mt8">
                                     We deliver according to the following conditions:
                                      <t t-if="doc.payment_term_id">
-                                         <div>    Terms of payment: <span t-field="doc.payment_term_id"/></div>
+                                         <div>Terms of payment: <span t-field="doc.payment_term_id"/></div>
                                      </t>
                                      <t t-if="doc.incoterm">
-                                        <div>    Terms of delivery: <span t-field="doc.incoterm"/></div>
+                                        <div>Terms of delivery: <span t-field="doc.incoterm"/></div>
                                      </t>
-                                        <div>    Currency: <span t-field="doc.currency_id"/></div>
+                                        <div>Currency: <span t-field="doc.currency_id"/></div>
                                 </div>
                             </t>
                         </t>
@@ -174,7 +174,7 @@
                                     <tr>
                                         <td><span t-esc="l_index+1"/></td>
                                         <t t-if="not (env.context.get('proforma', False) or is_pro_forma)">
-                                            <td><span t-field="l.name"/></td>
+                                            <td><span t-field="l.product.default_code"/></td>
                                         </t>
                                         <t t-if="env.context.get('proforma', False) or is_pro_forma">
                                             <td>
