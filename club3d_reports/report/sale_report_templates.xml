@@ -60,8 +60,8 @@
                             </div>
                             <div>
                                 <div>
-                                    <span t-if="doc.state not in ['draft','sent']" style="font-size:12px;">Order Number/Date</span>
-                                    <span t-if="doc.state in ['draft','sent']" style="font-size:12px;">Quotation Number/Date</span>
+                                    <span t-if="doc.state not in ['draft','sent']" style="font-size:12px;">Order Number / Date</span>
+                                    <span t-if="doc.state in ['draft','sent']" style="font-size:12px;">Quotation Number / Date</span>
                                 </div>
                                 <div>
                                     <span t-field="doc.name"/> /
@@ -76,7 +76,9 @@
                                     <div><span t-field="doc.payment_term_id"/></div>
                                 </t>
                                 <div style="font-size:12px;">Customer Number</div>
-                                <div>NULL</div>
+                                <t t-if="doc.partner_id.parent_id">
+                                <div><span t-field="doc.partner_id.parent_id.ref"/></div>
+                                </t>
 
                                 <t t-if="not (env.context.get('proforma', False) or is_pro_forma) and doc.validity_date and doc.state in ['draft', 'sent']">
                                     <div style="font-size:12px;">Expiration Date:</div>
@@ -93,7 +95,7 @@
                             <br/>
                             <br/>
                             <div class="pull-right">
-                                Currency <span t-field="doc.currency_id"/>
+                                <strong>Currency: </strong><span t-field="doc.currency_id"/>
                             </div>
                         </t>
                     </div>
