@@ -14,10 +14,8 @@
                             <div t-field="doc.partner_id"
                                 t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True, "phone_icons": False}'/>
                             <div><strong>Contact: </strong><span t-field="doc.partner_id.name"/></div>
-                            <div>Telephone: <span t-field="doc.partner_id.phone"/></div>
                         </div>
-
-                        <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
+<!--                        <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
                                  and doc.partner_invoice_id != doc.partner_id
                                  or doc.partner_shipping_id != doc.partner_invoice_id">
                             <strong t-if="doc.partner_shipping_id == doc.partner_invoice_id">Invoicing and shipping address:</strong>
@@ -31,7 +29,7 @@
                                 <div t-field="doc.partner_shipping_id"
                                     t-options='{"widget": "contact", "fields": ["address"], "no_marker": True, "phone_icons": True}'/>
                             </div>
-                        </t>
+                        </t>-->
                         <br/>
                         <br/>
                         <br/>
