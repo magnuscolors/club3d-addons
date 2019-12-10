@@ -5,8 +5,8 @@
         <t t-call="web.html_container">
             <t t-call="web.external_layout">
                 <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
-                <div class="page" style="padding-left:25px;">
-                    <div class="row" name="customer_address">
+                <div class="page" style="padding-left:25px;font-family: Open Sans Condensed', sans-serif;">
+                    <div class="row" name="customer_address" style="font-size:15px;">
                         <div class="col-xs-6">
                             <div>
                                 <span><strong>Customer Address:</strong></span>
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" name="shipping_details">
+                    <div class="row" name="shipping_details" style="font-size:15px;">
                         <br/>
                         <br/>
                         <div class="col-xs-6">
@@ -61,38 +61,12 @@
                     </div>
                     <br/>
                     <br/>
-                    <!--<h2>
-                        <span t-field="o.name"/>
-                    </h2>-->
-                    <!--<table class="table table-condensed">
-                        <thead>
-                            <tr>
-                                <th t-if="o.origin"><strong>Order (Origin)</strong></th>
-                                <th name="td_sched_date_h">
-                                    <strong>Date</strong>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td t-if="o.origin">
-                                    <span t-field="o.origin"/>
-                                </td>
-                                <td name="td_sched_date">
-                                   <t t-if="o.state == 'done'">
-                                        <span t-field="o.date_done"/>
-                                   </t>
-                                   <t t-if="o.state != 'done'">
-                                        <span t-field="o.scheduled_date"/>
-                                   </t>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>-->
-                    <table class="table table-condensed mt48" t-if="o.state!='done'">
+                    <table class="table table-condensed mt48" t-if="o.state!='done'" style="font-size:15px;">
                         <thead>
                             <tr>
                                 <th><strong>Item</strong></th>
+                                <th><strong>Reference</strong></th>
+                                <th><strong>Material</strong></th>
                                 <th><strong>Material Description</strong></th>
                                 <th><strong>Quantity</strong></th>
                             </tr>
@@ -101,6 +75,8 @@
                             <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
                             <tr t-foreach="lines" t-as="move">
                                 <td><span t-esc="move_index+1"/></td>
+                                <td><span t-esc="move.product_id.sudo().default_code"/></td>
+                                <td><span t-esc="move.product_id.sudo().name"/></td>
                                 <td>
                                     <span t-field="move.name"/>
                                     <p t-if="o.picking_type_code == 'outgoing'">
@@ -117,11 +93,13 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table class="table table-condensed mt48" t-if="o.move_line_ids and o.state=='done'">
+                    <table class="table table-condensed mt48" t-if="o.move_line_ids and o.state=='done'" style="font-size:15px;">
                         <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
                         <thead>
                             <tr>
                                 <th><strong>Item</strong></th>
+                                <th><strong>Reference</strong></th>
+                                <th><strong>Material</strong></th>
                                 <th><strong>Material Description</strong></th>
                                 <th name="lot_serial" t-if="has_serial_number">
                                     Lot/Serial Number
@@ -132,6 +110,8 @@
                         <tbody>
                             <tr t-foreach="o.move_line_ids" t-as="move_line">
                                 <td><span t-esc="move_line_index+1"/></td>
+                                <td><span t-esc="move_line.product_id.default_code"/></td>
+                                <td><span t-esc="move_line.product_id.name"/></td>
                                 <td>
                                     <span t-field="move_line.move_id.name"/>
                                     <p t-if="o.picking_type_code == 'outgoing'">
@@ -167,10 +147,10 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p t-if="o.backorder_id">
+                    <p t-if="o.backorder_id" style="font-size:15px;">
                         This shipment is a backorder of <t t-esc="o.backorder_id.name"/>.
                     </p>
-                    <p>
+                    <p style="font-size:15px;">
                         <t t-if="o.search([('backorder_id', '=', o.id), ('state', 'not in', ['cancel', 'done'])])">
                             All items couldn't be shipped, the remaining ones will be shipped as soon as they become available.
                         </t>
