@@ -9,14 +9,14 @@
                     <div class="col-xs-6">
                         <div t-if="doc.partner_id" class="mt8">
                             <t t-if="doc.partner_id.parent_id">
-                                <div t-field="doc.partner_id.parent_id"/>
+                                <div><strong>Company: </strong><span t-field="doc.partner_id.parent_id"/></div>
                             </t>
                             <div t-field="doc.partner_id"
-                                t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True, "phone_icons": True}'/>
+                                t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True, "phone_icons": False}'/>
+                            <br/>
                             <div><strong>Contact: </strong><span t-field="doc.partner_id.name"/></div>
                         </div>
-
-                        <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
+<!--                        <t t-if="doc.partner_shipping_id == doc.partner_invoice_id
                                  and doc.partner_invoice_id != doc.partner_id
                                  or doc.partner_shipping_id != doc.partner_invoice_id">
                             <strong t-if="doc.partner_shipping_id == doc.partner_invoice_id">Invoicing and shipping address:</strong>
@@ -30,17 +30,21 @@
                                 <div t-field="doc.partner_shipping_id"
                                     t-options='{"widget": "contact", "fields": ["address"], "no_marker": True, "phone_icons": True}'/>
                             </div>
-                        </t>
+                        </t>-->
+                        <br/>
+                        <br/>
+                        <br/>
                         <t t-if="env.context.get('proforma', False) or is_pro_forma">
                             <t t-if="doc.payment_term_id or doc.incoterm">
                                 <div class="mt8">
-                                    We deliver according to the following conditions
+                                    We deliver according to the following conditions:
                                      <t t-if="doc.payment_term_id">
                                          <div>Terms of payment: <span t-field="doc.payment_term_id"/></div>
                                      </t>
                                      <t t-if="doc.incoterm">
                                         <div>Terms of delivery: <span t-field="doc.incoterm"/></div>
                                      </t>
+                                        <div>Currency: <span t-field="doc.currency_id"/></div>
                                 </div>
                             </t>
                         </t>
@@ -58,8 +62,8 @@
                             </div>
                             <div>
                                 <div>
-                                    <span t-if="doc.state not in ['draft','sent']" style="font-size:12px;">Order Number/Date</span>
-                                    <span t-if="doc.state in ['draft','sent']" style="font-size:12px;">Quotation Number/Date</span>
+                                    <span t-if="doc.state not in ['draft','sent']" style="font-size:12px;">Order Number / Date</span>
+                                    <span t-if="doc.state in ['draft','sent']" style="font-size:12px;">Quotation Number / Date</span>
                                 </div>
                                 <div>
                                     <span t-field="doc.name"/> /
@@ -74,7 +78,9 @@
                                     <div><span t-field="doc.payment_term_id"/></div>
                                 </t>
                                 <div style="font-size:12px;">Customer Number</div>
-                                <div>NULL</div>
+                                <t t-if="doc.partner_id.parent_id">
+                                <div><span t-field="doc.partner_id.parent_id.ref"/></div>
+                                </t>
 
                                 <t t-if="not (env.context.get('proforma', False) or is_pro_forma) and doc.validity_date and doc.state in ['draft', 'sent']">
                                     <div style="font-size:12px;">Expiration Date:</div>
@@ -82,18 +88,8 @@
                                 </t>
                             </div>
                         </div>
-                        <t t-if="env.context.get('proforma', False) or is_pro_forma">
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <div class="pull-right">
-                                Currency <span t-field="doc.currency_id"/>
-                            </div>
-                        </t>
+                        <br/>
+                        <br/>
                     </div>
                 </div>
                 <br/>
@@ -182,7 +178,7 @@
                                         </t>
                                         <t t-if="env.context.get('proforma', False) or is_pro_forma">
                                             <td>
-                                                <span t-field="l.product_id"/>
+                                                <span t-field="l.product_id.default_code"/>
                                                 <br/>
                                                 <t t-set="dl" t-value="l.get_delivery_details()"/>
                                                 <t t-if="dl">
@@ -300,6 +296,8 @@
                 <t t-if="env.context.get('proforma', False) or is_pro_forma">
                     <p>
                         Please sign Back as confirmation:
+                        <br/>
+                        <br/>
                         <br/>
                         <span>..............................</span>
                     </p>
