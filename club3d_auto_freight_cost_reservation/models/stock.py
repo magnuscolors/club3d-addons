@@ -45,6 +45,7 @@ class StockMove(models.Model):
             'account_id': credit_account_id,
             'stock_move_id': self.id,
         }
+
         res = [(0, 0, debit_line_vals), (0, 0, credit_line_vals)]
         return res
 
@@ -60,6 +61,10 @@ class StockMove(models.Model):
 
         cost = self.value if self.value else self.price_unit * self.quantity_done
 
+        if self.origin_returned_move_id and not cost:
+            cost = self.origin_returned_move_id.value if self.origin_returned_move_id.value else self.origin_returned_move_id.price_unit * self.origin_returned_move_id.quantity_done
+            ref = 'Return of '+ ref
+
         move_lines = self._prepare_freight_account_move_line(quantity, abs(cost), credit_account_id, debit_account_id, freight_product, ref)
         if move_lines:
             date = self._context.get('force_period_date', fields.Date.context_today(self))
@@ -73,8 +78,12 @@ class StockMove(models.Model):
             new_account_move.post()
     
     def _action_done(self):
-        res = super(StockMove, self)._action_done()
+        result = super(StockMove, self)._action_done()
+        res = result
         IrDefault = self.env['ir.default'].sudo()
+
+        if self.env.context.get('is_scrap') and not res:
+            res = self
         for move in res:
             freight_product = IrDefault.get('res.company', "freight_product", company_id=move.company_id.id)
             freight_product = self.env['product.product'].sudo().browse(freight_product)
@@ -83,7 +92,7 @@ class StockMove(models.Model):
                 continue
 
             accounts_data = freight_product.product_tmpl_id.get_product_accounts()
-            journal_id = accounts_data['stock_journal'].id
+            journal_id = accounts_data['stock_journal'] and accounts_data['stock_journal'].id
 
             freight_cost_account = IrDefault.get('res.company', "freight_cost_account", company_id=move.company_id.id)
             freight_reservation_account = IrDefault.get('res.company', "freight_reservation_account", company_id=move.company_id.id)
@@ -93,5 +102,14 @@ class StockMove(models.Model):
             if move._is_in():
                 if move.location_id and move.location_id.usage != 'customer':
                     move.with_context(force_company=company_to.id)._create_freight_account_move_line(freight_reservation_account, freight_cost_account, journal_id, freight_product)
-        return res
+            elif move._is_out():
+                company_from = move.mapped('move_line_ids.location_id.company_id')
+                return_move = move.origin_returned_move_id
+                if return_move and return_move._is_in() and return_move.location_id and return_move.location_id.usage != 'customer':
+                    move.with_context(force_company=company_from.id)._create_freight_account_move_line(
+                        freight_cost_account, freight_reservation_account, journal_id, freight_product)
+                elif self.env.context.get('is_scrap') and not return_move and move.picking_id:
+                    move.with_context(force_company=company_from.id)._create_freight_account_move_line(
+                        freight_cost_account, freight_reservation_account, journal_id, freight_product)
+        return result
 
