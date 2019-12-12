@@ -7,7 +7,7 @@ from odoo.addons import decimal_precision as dp
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    upc_code = fields.Integer('UPC Code', size=12)
+    upc_code = fields.Char('UPC Code', size=12)
     net_weight = fields.Float(
         'Net Weight', compute='_compute_net_weight', digits=dp.get_precision('Stock Weight'),
         inverse='_set_net_weight', store=True, help="The net weight of the contents in Kg, not including any packaging, etc.")

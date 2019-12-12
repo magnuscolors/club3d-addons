@@ -41,7 +41,7 @@ class StockMove(models.Model):
         return res
 
     def _create_account_move_line(self, credit_account_id, debit_account_id, journal_id):
-        if self.picking_id.sale_id.company_id != self.picking_id.company_id:
+        if self.picking_id and self.picking_id.sale_id and self.picking_id.sale_id.company_id != self.picking_id.company_id:
             self.ensure_one()
             AccountMove = self.env['account.move']
             quantity = self.env.context.get('forced_quantity', self.product_qty)
@@ -100,21 +100,25 @@ class StockMove(models.Model):
         sudo_prop = self.env['ir.property'].sudo().with_context(force_company=self.company_id.id)
 
         journal = sudo_prop.get('property_stock_journal','product.category', 'product.category,%s' % self.product_id.categ_id.id)
+        journal =  journal.id if journal else journal
         if not journal:
             journal = sudo_prop.get('property_stock_journal','product.category').id
 
         acc_src = sudo_prop.get('property_stock_account_input_categ_id', 'product.category',
                                       'product.category,%s' % self.product_id.categ_id.id)
+        acc_src = acc_src.id if acc_src else acc_src
         if not acc_src:
             acc_src = sudo_prop.get('property_stock_account_input_categ_id', 'product.category').id
 
         acc_dest = sudo_prop.get('property_stock_account_output_categ_id', 'product.category',
                                 'product.category,%s' % self.product_id.categ_id.id)
+        acc_dest = acc_dest.id if acc_dest else acc_dest
         if not acc_dest:
             acc_dest = sudo_prop.get('property_stock_account_output_categ_id', 'product.category').id
 
         acc_valuation = sudo_prop.get('property_stock_valuation_account_id', 'product.category',
                                     'product.category,%s' % self.product_id.categ_id.id)
+        acc_valuation = acc_valuation.id if acc_valuation else acc_valuation
         if not acc_valuation:
             acc_valuation = sudo_prop.get('property_stock_valuation_account_id', 'product.category').id
 
@@ -126,6 +130,6 @@ class StockMove(models.Model):
         self.ensure_one()
         journal_id, acc_src, acc_dest, acc_valuation = \
             super(StockMove, self)._get_accounting_data_for_valuation()
-        if self.picking_id.sale_id.company_id != self.picking_id.company_id:
+        if self.picking_id and self.picking_id.sale_id and self.picking_id.sale_id.company_id != self.picking_id.company_id:
             journal_id, acc_src, acc_dest, acc_valuation = self.fetch_company_dependent_values()
         return journal_id, acc_src, acc_dest, acc_valuation

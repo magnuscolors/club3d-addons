@@ -8,7 +8,7 @@ class AccountMove(models.Model):
     @api.model
     def create(self, vals):
         move = super(AccountMove, self).create(vals)
-        if move.company_id != move.stock_move_id.company_id:
+        if move.stock_move_id and move.company_id != move.stock_move_id.company_id:
             move.company_id = move.stock_move_id.company_id.id
             move.line_ids.write({'company_id':move.stock_move_id.company_id.id})
         return move
