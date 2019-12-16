@@ -100,3 +100,16 @@ class AccountInvoice(models.Model):
             # if res.type in ('out_invoice', 'out_refund') and res.invoice_line_ids:
                 res.check_intercompany_settings(vals['state'])
         return res
+
+
+class AccountInvoiceLine(models.Model):
+    _inherit = 'account.invoice.line'
+
+    @api.model
+    def _prepare_invoice_line_data(self, dest_invoice, dest_company):
+        vals = super(AccountInvoiceLine, self)._prepare_invoice_line_data(dest_invoice, dest_company)
+        sudo_prop = self.env['ir.property'].sudo().with_context(force_company=dest_company.id)
+        standard_price = sudo_prop.get('standard_price', 'product.product', 'product.product,%s' % self.product_id.id)
+        if standard_price:
+            vals.update({'purchase_price':standard_price})
+        return vals
