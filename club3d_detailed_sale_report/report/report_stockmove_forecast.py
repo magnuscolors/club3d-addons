@@ -6,19 +6,21 @@ from odoo import api, fields, models, tools, _
 class ReportStockMoveForecast(models.Model):
     _name = 'report.stock.move.forecast'
     _auto = False
+    _order = "id, date"
 
 
     @api.depends('quantity')
     def _cumulative_quantity_compute(self):
         global x
         x = 0
-        for move in self:
+        for move in self.search([('id', 'in', self.ids)], order="id, date"):
             cum_qty = x + move.quantity
-            move.cumulative_quantity = cum_qty
+            move.cumulative_quantity = move.product_id.qty_available + cum_qty
             x = cum_qty
 
     date = fields.Date(string='Date', readonly=True)
-    product_id = fields.Many2one('product.product', string='Product', readonly=True, )
+    product_id = fields.Many2one('product.product', string='Product', readonly=True,)
+    qty_available = fields.Float(related='product_id.qty_available', readonly=True, store=False)
     partner_id = fields.Many2one('res.partner', string='Partner', readonly=True,)
     product_tmpl_id = fields.Many2one('product.template', string='Product Template',
                                       related='product_id.product_tmpl_id', readonly=True)
@@ -46,6 +48,7 @@ class ReportStockMoveForecast(models.Model):
                       sm.partner_id as partner_id
                   FROM stock_move_line sml, stock_move sm
                   WHERE sml.move_id = sm.id
+                  AND sml.state NOT IN ('cancel', 'done')
                   ORDER BY sml.id, sml.date
                 )""")
 
