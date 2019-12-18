@@ -111,7 +111,7 @@ class AccountInvoiceLine(models.Model):
         sudo_prop = self.env['ir.property'].sudo().with_context(force_company=dest_company.id)
         standard_price = sudo_prop.get('standard_price', 'product.product', 'product.product,%s' % self.product_id.id)
         if self.invoice_id.currency_id != dest_company.currency_id:
-            standard_price *= dest_company.currency_id.rate
+            standard_price *= self.invoice_id.currency_id.rate
         if standard_price:
             vals.update({'purchase_price':standard_price})
         return vals
