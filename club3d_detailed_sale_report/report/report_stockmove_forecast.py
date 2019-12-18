@@ -27,6 +27,31 @@ class ReportStockMoveForecast(models.Model):
     ref_number = fields.Char(string='PO/SO Number', readonly=True)
     cumulative_quantity = fields.Float(string='Cumulative Quantity', compute='_cumulative_quantity_compute', store=False)
     quantity = fields.Float(string='Quantity', readonly=True)
+    picking_id = fields.Many2one('stock.picking', string='Picking', readonly=True)
+
+    @api.multi
+    def action_open_ref(self):
+        self.ensure_one()
+        domain = {
+            'name': self.ref_number,
+            'view_mode': 'form',
+            'view_type': 'form',
+            'view_id': False,
+            'type': 'ir.actions.act_window',
+            'nodestroy': True,
+            'target': 'current',
+        }
+        if self.picking_id.sale_id:
+            domain.update({
+                'res_id':self.picking_id.sale_id.id,
+                'res_model': 'sale.order',
+                })
+        elif self.picking_id.purchase_id:
+            domain.update({
+                'res_id': self.picking_id.purchase_id.id,
+                'res_model': 'purchase.order',
+            })
+        return domain
 
     @api.model_cr
     def init(self):
@@ -45,9 +70,10 @@ class ReportStockMoveForecast(models.Model):
                              sm.product_uom_qty
                           END as quantity,
                       sm.origin as ref_number,
-                      sm.partner_id as partner_id
+                      sm.partner_id as partner_id,
+                      sml.picking_id as picking_id
                   FROM stock_move_line sml, stock_move sm
-                  WHERE sml.move_id = sm.id
+                  WHERE sml.move_id = sm.id 
                   AND sml.state NOT IN ('cancel', 'done')
                   ORDER BY sml.id, sml.date
                 )""")
