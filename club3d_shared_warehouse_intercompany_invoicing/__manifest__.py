@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['account_invoice_inter_company', 'stock', 'purchase'],
+    'depends': ['account_invoice_inter_company', 'stock', 'purchase', 'account_invoice_margin'],
 
     # always loaded
     'data': [
