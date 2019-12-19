@@ -18,7 +18,8 @@ class ReportStockMoveForecast(models.Model):
             move.cumulative_quantity = move.product_id.qty_available + cum_qty
             x = cum_qty
 
-    date = fields.Date(string='Date', readonly=True)
+    date = fields.Datetime(string='Expected Date', readonly=True)
+    last_modification_date = fields.Datetime(string='Last Modification Date', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True,)
     qty_available = fields.Float(related='product_id.qty_available', readonly=True, store=False)
     partner_id = fields.Many2one('res.partner', string='Partner', readonly=True,)
@@ -57,11 +58,12 @@ class ReportStockMoveForecast(models.Model):
     def init(self):
         tools.drop_view_if_exists(self._cr, 'report_stock_move_forecast')
         self._cr.execute("""
-            CREATE or REPLACE VIEW report_stock_move_forecast AS (
+                CREATE or REPLACE VIEW report_stock_move_forecast AS (
                   SELECT
-                      sml.id as id, 
-                      sml.product_id as product_id,
-                      date_trunc('week', to_date(to_char(sml.date, 'YYYY/MM/DD'), 'YYYY/MM/DD')) as date,
+                      sm.id as id, 
+                      sm.product_id as product_id,
+                      sm.date_expected as date,
+                      sm.write_date as last_modification_date,
                       CASE 
                           WHEN (SELECT id FROM stock_location WHERE usage IN ('customer', 'inventory') AND id = sm.location_dest_id) IS NOT NULL
                           THEN
@@ -71,10 +73,8 @@ class ReportStockMoveForecast(models.Model):
                           END as quantity,
                       sm.origin as ref_number,
                       sm.partner_id as partner_id,
-                      sml.picking_id as picking_id
-                  FROM stock_move_line sml, stock_move sm
-                  WHERE sml.move_id = sm.id 
-                  AND sml.state NOT IN ('cancel', 'done')
-                  ORDER BY sml.id, sml.date
+                      sm.picking_id as picking_id
+                  FROM stock_move sm
+                  WHERE sm.state NOT IN ('cancel', 'done')
+                  ORDER BY sm.id, sm.date_expected
                 )""")
-
