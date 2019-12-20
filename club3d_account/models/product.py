@@ -26,13 +26,13 @@ class ProductSupplierinfo(models.Model):
                     result['arch'] = etree.tostring(partner_xml)
                 pro_fields = partner_xml.xpath("//field[@name='product_name']")
                 if pro_fields:
-                    pro_fields = pro_fields[0]
-                    pro_fields.attrib['string'] = 'Customer Product Name'
+                    pro_field = pro_fields[0]
+                    pro_field.attrib['string'] = 'Customer Product Name'
                     result['arch'] = etree.tostring(partner_xml)
                 pro_code_fields = partner_xml.xpath("//field[@name='product_code']")
                 if pro_code_fields:
-                    pro_code_fields = pro_code_fields[0]
-                    pro_code_fields.attrib['string'] = 'Customer Product Code'
+                    pro_code_field = pro_code_fields[0]
+                    pro_code_field.attrib['string'] = 'Customer Product Code'
                     result['arch'] = etree.tostring(partner_xml)
 
         elif view_type == 'tree' and type:
