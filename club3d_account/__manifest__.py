@@ -103,16 +103,14 @@ To contribute to this module, please visit https://odoo-community.org.
 """,
 
     # any module necessary for this one to work correctly
-    'depends': ['account', 'product_supplierinfo_for_customer'
+    'depends': ['account'
     ],
     'external_dependencies': {
         'python': [],
     },
 
     # always loaded
-    'data': ['security/club3d_account_security.xml',
-             'views/club3d_custom_invoice_view.xml',
-             'views/product_view.xml'
+    'data': ['security/club3d_account_security.xml','views/club3d_custom_invoice_view.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
