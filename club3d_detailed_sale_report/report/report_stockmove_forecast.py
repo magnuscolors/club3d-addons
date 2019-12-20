@@ -13,7 +13,7 @@ class ReportStockMoveForecast(models.Model):
     def _cumulative_quantity_compute(self):
         global x
         x = 0
-        for move in self.search([('id', 'in', self.ids)], order="id, date"):
+        for move in self.search([('id', 'in', self.ids)], order="date"):
             cum_qty = x + move.quantity
             move.cumulative_quantity = move.product_id.qty_available + cum_qty
             x = cum_qty
