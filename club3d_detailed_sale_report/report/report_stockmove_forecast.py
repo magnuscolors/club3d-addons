@@ -6,7 +6,7 @@ from odoo import api, fields, models, tools, _
 class ReportStockMoveForecast(models.Model):
     _name = 'report.stock.move.forecast'
     _auto = False
-    _order = "id, date"
+    _order = "date"
 
 
     @api.depends('quantity')
@@ -76,5 +76,5 @@ class ReportStockMoveForecast(models.Model):
                       sm.picking_id as picking_id
                   FROM stock_move sm
                   WHERE sm.state NOT IN ('cancel', 'done')
-                  ORDER BY sm.id, sm.date_expected
+                  ORDER BY sm.date_expected
                 )""")
