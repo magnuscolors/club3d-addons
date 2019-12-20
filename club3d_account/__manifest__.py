@@ -103,7 +103,7 @@ To contribute to this module, please visit https://odoo-community.org.
 """,
 
     # any module necessary for this one to work correctly
-    'depends': [
+    'depends': ['account'
     ],
     'external_dependencies': {
         'python': [],

@@ -6,14 +6,14 @@ from odoo import api, fields, models, tools, _
 class ReportStockMoveForecast(models.Model):
     _name = 'report.stock.move.forecast'
     _auto = False
-    _order = "id, date"
+    _order = "date"
 
 
     @api.depends('quantity')
     def _cumulative_quantity_compute(self):
         global x
         x = 0
-        for move in self.search([('id', 'in', self.ids)], order="id, date"):
+        for move in self.search([('id', 'in', self.ids)], order="date"):
             cum_qty = x + move.quantity
             move.cumulative_quantity = move.product_id.qty_available + cum_qty
             x = cum_qty
@@ -76,5 +76,5 @@ class ReportStockMoveForecast(models.Model):
                       sm.picking_id as picking_id
                   FROM stock_move sm
                   WHERE sm.state NOT IN ('cancel', 'done')
-                  ORDER BY sm.id, sm.date_expected
+                  ORDER BY sm.date_expected
                 )""")
