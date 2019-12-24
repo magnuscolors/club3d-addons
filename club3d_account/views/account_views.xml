@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="invoice_form" model="ir.ui.view">
+        <field name="name">account.invoice.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(account.action_account_invoice_refund)d']" position="attributes">
+               <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+            <xpath expr="//field[@name='residual']" position="attributes">
+               <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+            <xpath expr="//field[@name='outstanding_credits_debits_widget']" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="invoice_form_cancel_inherit" model="ir.ui.view">
+        <field name="name">invoice.form.cancel.inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account_cancel.invoice_form_cancel_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_invoice_cancel']" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

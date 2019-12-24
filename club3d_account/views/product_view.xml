@@ -25,4 +25,76 @@
     <menuitem
            action="product_supplierinfo_customer_type_action" id="menu_product_pricelist_action2_sale"
            parent="sale.sale_order_menu" sequence="4" groups="sales_team.group_sale_salesman"/>
+
+    <record id="view_template_property_form" model="ir.ui.view">
+        <field name="name">product.template.stock.property.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock_account.view_template_property_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock_account.action_view_change_standard_price)d']" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_variant_easy_edit_view_inherit" model="ir.ui.view">
+        <field name="name">product.product.product.view.form.easy.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock_account.product_variant_easy_edit_view_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock_account.action_view_change_standard_price)d'][1]" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+            <xpath expr="//button[@name='%(stock_account.action_view_change_standard_price)d'][2]" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_form_view" model="ir.ui.view">
+        <field name="name">product.template.common.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='toggle_active']" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_product_view_form_easy_inherit_stock" model="ir.ui.view">
+        <field name="name">product.product.view.form.easy.inherit.stock</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_view_form_easy_inherit_stock"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock.action_view_change_product_quantity)d']" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="product_form_view_procurement_button">
+        <field name="name">product.product.procurement</field>
+        <field name="model">product.product</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_user'))]"/>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock.action_view_change_product_quantity)d']" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="product_template_form_view_procurement_button">
+        <field name="name">product.template_procurement</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='%(stock.action_view_change_product_quantity)d']" position="attributes">
+                <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
 </odoo>
