@@ -112,7 +112,10 @@
                                 <th>Item</th>
                                 <th>Reference</th>
                                 <th>Material</th>
-                                <th>Description Statistical Code</th>
+                                <th>
+                                    <span>Description</span>
+                                    <br/><span>Statistical Code</span>
+                                </th>
                                 <th class="hidden">Source Document</th>
                                 <th class="text-right">Unit Price</th>
                                 <th class="text-right">Quantity</th>
@@ -127,7 +130,10 @@
                                     <td><span t-esc="l_index+1"/></td>
                                     <td><span t-field="l.product_id.default_code"/></td>
                                     <td><span t-field="l.product_id.name"/></td>
-                                    <td><span t-field="l.name"/></td>
+                                    <td>
+                                        <span t-field="l.name"/><br/>
+                                        <span style="font-size:12px;" t-if="l.product_id.hs_code_id">H.S. code:<span t-field="l.product_id.hs_code_id.local_code"/></span>
+                                    </td>
                                     <td class="hidden"><span t-field="l.origin"/></td>
                                     <td class="text-right">
                                         <span t-field="l.price_unit"/>
