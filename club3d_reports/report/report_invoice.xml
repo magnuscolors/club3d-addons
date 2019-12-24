@@ -8,12 +8,15 @@
                     <div class="row" style="font-size:15px;">
                         <div name="invoice_address" class="col-xs-6">
                             <t t-if="o.partner_id.parent_id">
-                                <div t-field="o.partner_id.parent_id"/>
+                                <div><span t-field="o.partner_id.parent_id"/></div>
+                            </t>
+                            <t t-if="not o.partner_id.parent_id">
+                                <div><span t-field="o.partner_id"/></div>
                             </t>
 
                             <div t-field="o.partner_id"
                                 t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
-                            <div> <strong>Contact: </strong><span t-field="o.partner_id.name"/> </div>
+                            <div t-if="o.partner_id.parent_id"> <strong>Contact: </strong><span t-field="o.partner_id.name"/> </div>
                             <!--<div t-if="o.partner_id.vat" class="mt16">
                                 <t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.partner_id.vat"/>
                             </div>-->
@@ -79,8 +82,11 @@
                                             <span t-field="picking.name"/>/ <span t-field="picking.scheduled_date"/></div>
                                         </t>
                                     </t>
-                                    <div style="font-size:12px;">Customer Number</div>
-                                    <div>NULL</div>
+                                    <t t-if="(o.partner_id.parent_id and o.partner_id.parent_id.ref) or (not o.partner_id.parent_id and o.partner_id.ref)">
+                                        <div style="font-size:12px;">Customer Number</div>
+                                        <div t-if="o.partner_id.parent_id"><span t-field="o.partner_id.parent_id.ref"/></div>
+                                        <div t-if="not o.partner_id.parent_id"><span t-field="o.partner_id.ref"/></div>
+                                    </t>
                                     <t t-if="o.partner_id.vat" >
                                          <div style="font-size:12px;">Your Tax Number</div>
                                         <div><span t-field="o.partner_id.vat"/></div>
