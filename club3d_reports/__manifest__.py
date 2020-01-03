@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale', 'stock'],
+    'depends': ['base', 'sale', 'stock', 'stock_picking_invoice_link', 'product_harmonized_system'],
 
     # always loaded
     'data': [
