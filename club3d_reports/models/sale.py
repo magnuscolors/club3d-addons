@@ -1,10 +1,35 @@
 # -*- coding: utf-8 -*-
 
+from lxml import etree
+from odoo.osv.orm import setup_modifiers
 from odoo import models, fields, api, _
 from datetime import datetime
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
+
+    @api.model
+    def fields_view_get(
+            self, view_id=None, view_type='form', toolbar=False,
+            submenu=False):
+
+        result = super(SaleOrderLine, self).fields_view_get(
+            view_id=view_id, view_type=view_type, toolbar=toolbar,
+            submenu=submenu)
+        group_club3d_restricted = self.user_has_groups('club3d_account.group_club3d_restricted')
+        if view_type == 'form' and not group_club3d_restricted:
+            doc = etree.XML(result['arch'])
+            node = doc.xpath("//field[@name='purchase_price']")[0]
+            node.set('invisible', '1')
+            setup_modifiers(node, result['fields']['purchase_price'])
+
+            node = doc.xpath("//field[@name='margin']")[0]
+            node.set('invisible', '1')
+            setup_modifiers(node, result['fields']['margin'])
+
+            result['arch'] = etree.tostring(doc, encoding='unicode')
+
+        return result
 
     @api.multi
     def get_delivery_details(self):
