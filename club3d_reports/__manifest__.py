@@ -29,6 +29,7 @@
         'report/report_deliveryslip.xml',
         'report/report_invoice.xml',
         'views/res_company_views.xml',
+        'views/account_portal_templates.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
