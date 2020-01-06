@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale'],
+    'depends': ['base', 'sale', 'stock', 'stock_picking_invoice_link', 'product_harmonized_system'],
 
     # always loaded
     'data': [
@@ -29,6 +29,7 @@
         'report/report_deliveryslip.xml',
         'report/report_invoice.xml',
         'views/res_company_views.xml',
+        'views/account_portal_templates.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

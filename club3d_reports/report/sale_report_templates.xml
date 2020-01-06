@@ -134,12 +134,29 @@
                                                 <br/>
                                                 <t t-set="dl" t-value="l.get_delivery_details()"/>
                                                 <t t-if="dl">
-                                                    <i><span class="pull-right">
-                                                            Delivery date: <span t-esc="dl['date']"/><br/>
-                                                        <t t-if="dl['back_ref']">
-                                                            Backorder Number: <span t-esc="dl['back_ref']"/>
+                                                    <i style="font-size:12px;"><span class="pull-right">
+                                                        <t t-if="dl['delivery_date']">
+                                                            <t t-foreach="len(dl['delivery_date'])" t-as="ddi">
+                                                                <span t-esc="dl['delivery_date'][ddi]"/><br/>
+                                                            </t>
                                                         </t>
-                                                    </span></i>
+                                                        <t t-if="dl['expected_date']">
+                                                            <t t-foreach="len(dl['expected_date'])" t-as="edi">
+                                                                <span t-esc="dl['expected_date'][edi]"/><br/>
+                                                            </t>
+                                                        </t>
+                                                        <t t-if="dl['done_back_ref']">
+                                                            <t t-foreach="len(dl['done_back_ref'])" t-as="dbi">
+                                                                <span t-esc="dl['done_back_ref'][dbi]"/><br/>
+                                                            </t>
+                                                        </t>
+                                                        <t t-if="dl['back_ref']">
+                                                            <t t-foreach="len(dl['back_ref'])" t-as="bi">
+                                                                <span t-esc="dl['back_ref'][bi]"/><br/>
+                                                            </t>
+                                                        </t>
+                                                    </span>
+                                                    </i>
                                                 </t>
                                             </td>
                                         </t>

@@ -19,7 +19,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['sale', 'stock', 'account'],
+    'depends': ['sale', 'stock', 'account', 'club3d_multi_company_warehouse'],
 
     # always loaded
     'data': [
