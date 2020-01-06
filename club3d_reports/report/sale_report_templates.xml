@@ -55,8 +55,8 @@
                                 </div>
                                 <div>
                                     <span t-field="doc.name"/> /
-                                    <t t-if="doc.state not in ['draft','sent']"><span t-field="doc.confirmation_date"/></t>
-                                    <t t-if="doc.state in ['draft','sent']"><span t-field="doc.date_order"/></t>
+                                    <t t-if="doc.state not in ['draft','sent']"><span t-field="doc.confirmation_date" t-field-options='{"format": "dd/MM/yyyy"}'/></t>
+                                    <t t-if="doc.state in ['draft','sent']"><span t-field="doc.date_order" t-field-options='{"format": "dd/MM/yyyy"}'/></t>
                                 </div>
                                 <div style="font-size:12px;">Client Reference</div>
                                 <div><span t-field="doc.client_order_ref"/></div>
