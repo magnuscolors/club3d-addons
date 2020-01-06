@@ -1,0 +1,6 @@
+<odoo>
+    <template id="portal_invoice_report" name="Invoice portal page inherit club3d" inherit_id="account.portal_invoice_report">
+        <xpath expr="//table/tbody/tr[2]" position="replace">
+        </xpath>
+    </template>
+</odoo>
