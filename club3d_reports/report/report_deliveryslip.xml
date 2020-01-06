@@ -31,11 +31,11 @@
                                 </div>
                                 <div>
                                     <div style="font-size:12px;">Number/Date</div>
-                                    <div><span t-field="o.name"/> / <span t-field="o.scheduled_date"/></div>
+                                    <div><span t-field="o.name"/> / <span t-field="o.scheduled_date" t-field-options='{"format": "dd/MM/yyyy"}'/></div>
                                     <div style="font-size:12px;">Client Reference</div>
                                     <div><span t-field="o.client_order_ref"/></div>
                                     <div style="font-size:12px;">Order Number/Date</div>
-                                    <div><span t-field="o.sale_id.name"/> / <span t-field="o.sale_id.confirmation_date"/></div>
+                                    <div><span t-field="o.sale_id.name"/> / <span t-field="o.sale_id.confirmation_date" t-field-options='{"format": "dd/MM/yyyy"}'/></div>
                                     <t t-if="(o.partner_id.parent_id and o.partner_id.parent_id.ref) or (not o.partner_id.parent_id and o.partner_id.ref)">
                                         <div style="font-size:12px;">Customer Number</div>
                                         <div t-if="o.partner_id.parent_id"><span t-field="o.partner_id.parent_id.ref"/></div>
