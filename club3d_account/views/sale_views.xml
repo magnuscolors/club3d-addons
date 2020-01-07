@@ -33,6 +33,17 @@
         </field>
     </record>
 
+    <record id="sale_margin_sale_order" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_margin.sale_margin_sale_order"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='margin']" position="attributes">
+               <attribute name="groups">club3d_account.group_club3d_restricted</attribute>
+            </xpath>
+        </field>
+    </record>
+
     <record id="sale.menu_sale_config" model="ir.ui.menu">
         <field name="groups_id" eval="[(6,0,[ref('club3d_account.group_club3d_restricted')])]"/>
     </record>
