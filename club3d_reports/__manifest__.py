@@ -28,6 +28,7 @@
         'report/sale_report_templates.xml',
         'report/report_deliveryslip.xml',
         'report/report_invoice.xml',
+        'report/purchase_order_templates.xml',
         'views/res_company_views.xml',
         'views/account_portal_templates.xml'
     ],
