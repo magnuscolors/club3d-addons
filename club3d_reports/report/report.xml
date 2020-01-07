@@ -25,20 +25,27 @@
             </xpath>
         </template>
 
-
         <template id="external_layout_header">
-            <div class="header">
+            <div class="header o_background_footer">
                 <div class="row">
-                  <div class="row" style="position:relative;font-size:3em;
-                                width:100%;height:100%;z-index:1000;padding-left:5px;">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.report_background_image1)"
+                  <div class="row" style="position:relative;font-size:3em;width:100%;height:100%;z-index:1000;padding-left:5px;">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.report_header_image)"
                                 style="width:100%; display: block;"/>
                     </div>
                 </div>
             </div>
-
             <div class="article o_report_layout_standard">
                 <t t-raw="0"/>
+            </div>
+
+            <div class="footer o_background_footer">
+                <div class="row">
+                  <div class="row" style="position:relative;font-size:3em;
+                                width:100%;height:100%;z-index:1000;padding-left:5px;">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.report_footer_image)"
+                                style="width:100%; display: block;"/>
+                    </div>
+                </div>
             </div>
         </template>
 
@@ -56,19 +63,23 @@
             </t>
 
             <t t-call="club3d_reports.external_layout_header"><t t-raw="0"/></t>
+        </template>
 
-            <!--<t t-if="company.external_report_layout == 'background'">
-                <t t-call="web.external_layout_background"><t t-raw="0"/></t>
+        <template id="commerical_invoice_external_layout">
+            <!-- Multicompany -->
+            <t t-if="not o and doc">
+                <t t-set="o" t-value="doc"/>
             </t>
-            <t t-if="company.external_report_layout == 'boxed'">
-                <t t-call="web.external_layout_boxed"><t t-raw="0"/></t>
+
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
             </t>
-            <t t-if="company.external_report_layout == 'clean'">
-                <t t-call="web.external_layout_clean"><t t-raw="0"/></t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"/>
             </t>
-            <t t-if="company.external_report_layout in (False, 'standard')">
-                <t t-call="web.external_layout_standard"><t t-raw="0"/></t>
-            </t>-->
+            <div class="article o_report_layout_standard">
+                <t t-raw="0"/>
+            </div>
         </template>
 
         <report

@@ -9,10 +9,10 @@
         <field name="arch" type="xml">
             <xpath expr="//page[last()]" position="after">
                 <page name="background" string="Background Image Configuration">
-                    <group string="Background Image for Invoice">
-                        <field name="report_background_image1" widget="image" class="oe_avatar oe_left"/>
-                        <!--<field name="header_image" widget="image" class="oe_avatar oe_left"/>
-                        <field name="footer_image" widget="image" class="oe_avatar oe_left"/>-->
+                    <group string="Background Image for Report">
+                        <!--<field name="report_background_image1" widget="image" class="oe_avatar oe_left"/>-->
+                        <field name="report_header_image" widget="image" class="oe_avatar oe_left"/>
+                        <field name="report_footer_image" widget="image" class="oe_avatar oe_left"/>
                     </group>
                 </page>
             </xpath>

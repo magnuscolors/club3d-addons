@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <template id="report_invoice_document_club3d">
-            <t t-call="web.external_layout">
+            <t t-call="club3d_reports.commerical_invoice_external_layout">
                 <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
                 <div class="page" style="padding-left:25px;font-family: Open Sans, sans-serif;">
                     <div class="row" style="font-size:15px;">
