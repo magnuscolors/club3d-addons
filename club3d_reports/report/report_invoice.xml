@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <template id="report_invoice_document_club3d">
-            <t t-call="web.external_layout">
+            <t t-call="club3d_reports.commerical_invoice_external_layout">
                 <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
                 <div class="page" style="padding-left:25px;font-family: Open Sans, sans-serif;">
                     <div class="row" style="font-size:15px;">
@@ -65,7 +65,7 @@
                                         </t>
                                     </div>
                                     <t t-if="o.name" >
-                                        <div style="font-size:12px;">Reference/Date</div>
+                                        <div style="font-size:12px;">Reference</div>
                                         <div><span t-field="o.name"/></div>
                                     </t>
                                     <t t-if="sale_ids">

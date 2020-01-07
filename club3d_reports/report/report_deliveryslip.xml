@@ -62,7 +62,7 @@
                             <div>Weights (gross/net) - Volumes - Selections</div>
                             <div>Net Weight&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;<span t-field="o.weight"/> &#160; <span t-field="o.weight_uom_id"/> </div>
                             <div>Gross Weight&#160; &#160; &#160; &#160;  &#160; &#160;<span t-field="o.shipping_weight"/></div>
-                            <div>No. of Packages&#160; &#160;  &#160; &#160;<span t-field="o.number_of_packages"/></div>
+                            <div>No. of Packages&#160; &#160;  &#160; &#160;<span>.....</span></div>
                         </div>
                     </div>
                     <br/>
