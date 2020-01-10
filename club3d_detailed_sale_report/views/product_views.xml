@@ -14,13 +14,13 @@
                             attrs="{'invisible':[('type', '!=', 'product')]}"
                             class="oe_stat_button" icon="fa-building-o">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="virtual_available" widget="statinfo" nolabel="1"/>
-                                    <span attrs="{'invisible':[('outgoing_qty', '=', 0),('incoming_qty','=',0)]}">
-                                        (-<field name="outgoing_qty" widget="statinfo" nolabel="1"/>
-                                        +<field name="incoming_qty" widget="statinfo" nolabel="1"/>)
+                                <span class="o_stat_value"><field name="default_virtual_available" widget="statinfo" nolabel="1"/>
+                                    <span attrs="{'invisible':[('default_outgoing_qty', '=', 0),('default_incoming_qty','=',0)]}">
+                                        (-<field name="default_outgoing_qty" widget="statinfo" nolabel="1"/>
+                                        +<field name="default_incoming_qty" widget="statinfo" nolabel="1"/>)
                                     </span>
                                 </span>
-                                <span class="o_stat_text">Forecasted Report</span>
+                                <span class="o_stat_text">ATP Forecasted Report</span>
                             </div>
                         </button>
                     </button>
@@ -42,13 +42,13 @@
                         attrs="{'invisible':[('type', '!=', 'product')]}"
                         class="oe_stat_button" icon="fa-building-o">
                         <div class="o_field_widget o_stat_info">
-                            <span class="o_stat_value"><field name="virtual_available" widget="statinfo" nolabel="1"/>
-                                <span attrs="{'invisible':[('outgoing_qty', '=', 0),('incoming_qty','=',0)]}">
-                                    (-<field name="outgoing_qty" widget="statinfo" nolabel="1"/>
-                                    +<field name="incoming_qty" widget="statinfo" nolabel="1"/>)
+                            <span class="o_stat_value"><field name="default_virtual_available" widget="statinfo" nolabel="1"/>
+                                <span attrs="{'invisible':[('default_outgoing_qty', '=', 0),('default_incoming_qty','=',0)]}">
+                                    (-<field name="default_outgoing_qty" widget="statinfo" nolabel="1"/>
+                                    +<field name="default_incoming_qty" widget="statinfo" nolabel="1"/>)
                                 </span>
                             </span>
-                            <span class="o_stat_text">Forecasted Report</span>
+                            <span class="o_stat_text">ATP Forecasted Report</span>
                         </div>
                     </button>
                     </button>
