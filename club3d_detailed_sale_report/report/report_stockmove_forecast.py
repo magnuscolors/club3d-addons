@@ -15,13 +15,13 @@ class ReportStockMoveForecast(models.Model):
         x = 0
         for move in self.search([('id', 'in', self.ids)], order="date"):
             cum_qty = x + move.quantity
-            move.cumulative_quantity = move.product_id.qty_available + cum_qty
+            move.cumulative_quantity = move.product_id.default_qty_available + cum_qty
             x = cum_qty
 
     date = fields.Datetime(string='Expected Date', readonly=True)
     last_modification_date = fields.Datetime(string='Last Modification Date', readonly=True)
     product_id = fields.Many2one('product.product', string='Product', readonly=True,)
-    qty_available = fields.Float(related='product_id.qty_available', readonly=True, store=False)
+    qty_available = fields.Float('Quantity On Hand', related='product_id.default_qty_available', readonly=True, store=False)
     partner_id = fields.Many2one('res.partner', string='Partner', readonly=True,)
     product_tmpl_id = fields.Many2one('product.template', string='Product Template',
                                       related='product_id.product_tmpl_id', readonly=True)
@@ -57,24 +57,26 @@ class ReportStockMoveForecast(models.Model):
     @api.model_cr
     def init(self):
         tools.drop_view_if_exists(self._cr, 'report_stock_move_forecast')
+        location_ids = self.env.user.company_id.delivery_warehouse_id.view_location_id.child_ids.ids
+        op, ids = ('IN', tuple(location_ids)) if len(location_ids) > 1 else ('=', location_ids[0])
         self._cr.execute("""
                 CREATE or REPLACE VIEW report_stock_move_forecast AS (
                   SELECT
-                      sm.id as id, 
+                      sm.id as id,
                       sm.product_id as product_id,
                       sm.date_expected as date,
                       sm.write_date as last_modification_date,
-                      CASE 
+                      CASE
                           WHEN (SELECT id FROM stock_location WHERE usage IN ('customer', 'inventory') AND id = sm.location_dest_id) IS NOT NULL
                           THEN
                             -sm.product_uom_qty
-                          ELSE 
+                          ELSE
                              sm.product_uom_qty
                           END as quantity,
                       sm.origin as ref_number,
                       sm.partner_id as partner_id,
                       sm.picking_id as picking_id
                   FROM stock_move sm
-                  WHERE sm.state NOT IN ('cancel', 'done')
+                  WHERE sm.state NOT IN ('cancel', 'done') AND (sm.location_dest_id {0} {1} OR sm.location_id {0} {1})
                   ORDER BY sm.date_expected
-                )""")
+                )""".format(op, ids))
