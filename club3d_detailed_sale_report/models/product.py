@@ -20,6 +20,60 @@ class Product(models.Model):
     default_qty_available = fields.Float('Def. WH Quantity On Hand', compute='_def_compute_quantities', search='_search_default_qty_available', digits=dp.get_precision('Product Unit of Measure'))
     default_incoming_qty = fields.Float('Def. WH Incoming', compute='_def_compute_quantities', search='_search_default_incoming_qty', digits=dp.get_precision('Product Unit of Measure'))
     default_outgoing_qty = fields.Float('Def. WH Outgoing', compute='_def_compute_quantities', search='_search_default_outgoing_qty', digits=dp.get_precision('Product Unit of Measure'))
+    def_wh_atp = fields.Boolean('Def. WH ATP', compute='_def_wh_atp_compute', search='_search_wh_atp')
+
+    def _get_apt_cal(self):
+        product_ids = []
+        for product in self:
+            out_qty, in_qty = 0.0, 0.0
+            domain = [
+                ('product_id', '=', product.id),
+                ('state', 'not in', ('cancel', 'done')),
+            ]
+            out_domain = domain + [('location_dest_id.usage', 'in', ('customer', 'inventory'))]
+            in_domain = domain
+            Move = self.env['stock.move']
+            warehouse = self.env.user.company_id.delivery_warehouse_id
+            location_ids = warehouse.view_location_id.child_ids.ids
+            if location_ids:
+                out_domain += [
+                    ('location_id', 'in', location_ids),
+                ]
+                in_domain += [('location_dest_id', 'in', location_ids)]
+
+            out_moves = Move.read_group(out_domain, ['product_id', 'product_qty'], ['product_id'])
+            if out_moves:
+                out_qty = out_moves and out_moves[0]['product_qty']
+
+            latest_date_expected = Move.search(domain, order='date_expected Desc', limit=1).date_expected
+            if latest_date_expected:
+                in_domain += [('date_expected', '<=', latest_date_expected)]
+
+            in_moves = Move.read_group(in_domain, ['product_id', 'product_qty'], ['product_id'])
+            if in_moves:
+                in_qty = in_moves and in_moves[0]['product_qty']
+
+            forecasted_qty = product.default_incoming_qty + in_qty - out_qty
+            if forecasted_qty < 0:
+                product_ids.append(product.id)
+        return product_ids
+        
+        
+    @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
+    def _def_wh_atp_compute(self):
+        product_ids = self._get_apt_cal()
+        for product in self:
+            if product.id in product_ids:
+                product.def_wh_atp = True
+            else:
+                product.def_wh_atp = False
+
+    def _search_wh_atp(self, operator, value):
+        product_ids = self.search([])._get_apt_cal()
+        if operator == '=':
+            return [('id', 'in', product_ids)]
+        else:
+            return [('id', 'in', self.search([('id', 'not in', product_ids)]).ids)]
 
     @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
     def _def_compute_quantities(self):
@@ -108,6 +162,7 @@ class Product(models.Model):
         digits=dp.get_precision('Product Unit of Measure'))
     default_outgoing_qty = fields.Float('Def. WH Outgoing', compute='_def_compute_quantities', search='_search_default_outgoing_qty',
         digits=dp.get_precision('Product Unit of Measure'))
+    # def_wh_atp = fields.Boolean('Def. WH ATP', compute='_def_wh_atp_compute', search='_search_wh_atp')
 
     @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
     def _def_compute_quantities(self):
