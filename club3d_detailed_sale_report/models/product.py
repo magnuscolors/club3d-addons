@@ -41,11 +41,13 @@ class Product(models.Model):
                 ]
                 in_domain += [('location_dest_id', 'in', location_ids)]
 
+            latest_date_expected = Move.search(out_domain, order='date_expected Desc', limit=1).date_expected
+            if not latest_date_expected:
+                continue
             out_moves = Move.read_group(out_domain, ['product_id', 'product_qty'], ['product_id'])
             if out_moves:
                 out_qty = out_moves and out_moves[0]['product_qty']
 
-            latest_date_expected = Move.search(domain, order='date_expected', limit=1).date_expected
             if latest_date_expected:
                 in_domain += [('date_expected', '<=', latest_date_expected)]
 
@@ -59,7 +61,7 @@ class Product(models.Model):
         return product_ids
         
         
-    @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
+    @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available', 'stock_move_ids.date_expected')
     def _def_wh_atp_compute(self):
         product_ids = self._get_apt_cal()
         for product in self:
@@ -164,15 +166,15 @@ class Product(models.Model):
         digits=dp.get_precision('Product Unit of Measure'))
     # def_wh_atp = fields.Boolean('Def. WH ATP', compute='_def_wh_atp_compute', search='_search_wh_atp')
 
-    @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
-    def _def_wh_atp_compute(self):
-        for template in self:
-            atp_variants = template.mapped('product_variant_ids')._get_apt_cal()
-            print ('------atp_variants-----',atp_variants)
-            if atp_variants:
-                template.def_wh_atp = True
-            else:
-                template.def_wh_atp = False
+    # @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
+    # def _def_wh_atp_compute(self):
+    #     for template in self:
+    #         atp_variants = template.mapped('product_variant_ids')._get_apt_cal()
+    #         print ('------atp_variants-----',atp_variants)
+    #         if atp_variants:
+    #             template.def_wh_atp = True
+    #         else:
+    #             template.def_wh_atp = False
 
     # def _search_wh_atp(self, operator, value):
     #     product_ids = self.search([])._get_apt_cal()
