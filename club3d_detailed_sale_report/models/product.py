@@ -164,34 +164,27 @@ class Product(models.Model):
         digits=dp.get_precision('Product Unit of Measure'))
     default_outgoing_qty = fields.Float('Def. WH Outgoing', compute='_def_compute_quantities', search='_search_default_outgoing_qty',
         digits=dp.get_precision('Product Unit of Measure'))
-    # def_wh_atp = fields.Boolean('Def. WH ATP', compute='_def_wh_atp_compute', search='_search_wh_atp')
+    def_wh_atp = fields.Boolean('Def. WH ATP', compute='_def_wh_atp_compute', search='_search_wh_atp')
 
-    # @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
-    # def _def_wh_atp_compute(self):
-    #     for template in self:
-    #         atp_variants = template.mapped('product_variant_ids')._get_apt_cal()
-    #         print ('------atp_variants-----',atp_variants)
-    #         if atp_variants:
-    #             template.def_wh_atp = True
-    #         else:
-    #             template.def_wh_atp = False
+    @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
+    def _def_wh_atp_compute(self):
+        for template in self:
+            atp_variants = template.mapped('product_variant_ids')._get_apt_cal()
+            if atp_variants:
+                template.def_wh_atp = True
+            else:
+                template.def_wh_atp = False
 
-    # def _search_wh_atp(self, operator, value):
-    #     product_ids = self.search([])._get_apt_cal()
-    #     if operator == '=':
-    #         return [('id', 'in', product_ids)]
-    #     else:
-    #         return [('id', 'in', self.search([('id', 'not in', product_ids)]).ids)]
-
-    # def _def_wh_atp_compute_dict(self):
-    #     prod_available = {}
-    #     for template in self:
-    #         atp = False
-    #         atp_variants = template.mapped('product_variant_ids')._get_apt_cal()
-    #         if atp_variants:
-    #             atp = True
-    #         prod_available[template.id] = atp
-    #     return prod_available
+    def _search_wh_atp(self, operator, value):
+        temp_ids =[]
+        for template in self.search([]):
+            atp_variants = template.mapped('product_variant_ids')._get_apt_cal()
+            if atp_variants:
+                temp_ids.append(template.id)
+        if operator == '=':
+            return [('id', 'in', temp_ids)]
+        else:
+            return [('id', 'in', self.search([('id', 'not in', temp_ids)]).ids)]
 
     @api.depends('qty_available', 'incoming_qty', 'outgoing_qty', 'virtual_available')
     def _def_compute_quantities(self):
