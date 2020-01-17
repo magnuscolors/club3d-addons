@@ -30,7 +30,8 @@
         'report/report_invoice.xml',
         'report/purchase_order_templates.xml',
         'views/res_company_views.xml',
-        'views/account_portal_templates.xml'
+        'views/account_portal_templates.xml',
+        'views/sale_views.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

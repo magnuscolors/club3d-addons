@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_withcarrier_out_form" model="ir.ui.view">
+        <field name="name">delivery.stock.picking_withcarrier.form.view</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='carrier_tracking_ref']" position="replace">
+            </xpath>
+            <xpath expr="//div[@name='tracking']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='owner_id']" position="after">
+                <label for="carrier_tracking_ref" string="Carrier Tracking Reference"/>
+                <div name="tracking">
+                    <field name="carrier_tracking_ref" class="oe_inline" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                    <button type='object' class="fa fa-arrow-right oe_link" name="cancel_shipment" string="Cancel" attrs="{'invisible':['|','|','|',('carrier_tracking_ref','=',False),('delivery_type','in', ['fixed', 'base_on_rule']),('delivery_type','=',False),('state','not in',('done'))]}"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

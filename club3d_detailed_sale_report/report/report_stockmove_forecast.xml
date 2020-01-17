@@ -59,7 +59,7 @@
     </record>
 
     <record id="action_stock_move_level_forecast_report_template" model="ir.actions.act_window">
-        <field name="name">Stock Move Level Forecast Default Warehouse</field>
+        <field name="name">Stock Level Forecast Default Warehouse</field>
         <field name="res_model">report.stock.move.forecast</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,graph,pivot</field>
@@ -69,7 +69,7 @@
     </record>
 
     <record id="action_stock_move_level_forecast_report_product" model="ir.actions.act_window">
-        <field name="name">Stock Move Level Forecast Default Warehouse</field>
+        <field name="name">Stock Level Forecast Default Warehouse</field>
         <field name="res_model">report.stock.move.forecast</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,graph,pivot</field>
