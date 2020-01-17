@@ -44,7 +44,6 @@ class StockMRPIssueWIZ(models.TransientModel):
         stock_mrp_issue = self.env['stock.mrp.issue']
         for dt in res:
             stock_mrp_issue.create({'product_id':dt[0]})
-        # -----res - ------- [(2,), (4,)]
         action_name = 'club3d_detailed_sale_report.action_stock_mrp_issue'
         tree_view_name = 'club3d_detailed_sale_report.view_stock_mrp_issue_tree'
 
@@ -74,32 +73,3 @@ class StockMRPIssue(models.Model):
             'target': 'current',
         }
         return domain
-
-
-
-    # @api.model_cr
-    # def init(self):
-    #     tools.drop_view_if_exists(self._cr, 'stock_mrp_issue')
-    #     location_ids = self.env.user.company_id.delivery_warehouse_id.view_location_id.child_ids.ids
-    #     op, ids = ('IN', tuple(location_ids)) if len(location_ids) > 1 else ('=', location_ids[0])
-    #     self._cr.execute("""
-    #                 CREATE or REPLACE VIEW report_stock_move_forecast AS (
-    #                   SELECT id, product_id, date_expected, on_hand, move_quantity, cum_sum1 FROM (
-    #                     (SELECT id, product_id, date_expected, on_hand, move_quantity, SUM(move_quantity) OVER (PARTITION BY product_id ORDER BY date_expected, id)+on_hand AS cum_sum1 FROM
-    #                         (SELECT
-    #                             sm.id as id,
-    #                             sm.product_id as product_id,
-    #                             sm.date_expected as date_expected,
-    #                             (SELECT SUM(quantity) FROM stock_quant WHERE product_id = sm.product_id AND location_id {0} {1}) AS on_hand,
-    #                             CASE
-    #                               WHEN (SELECT id FROM stock_location WHERE usage IN ('customer', 'inventory') AND id = sm.location_dest_id) IS NOT NULL
-    #                               THEN
-    #                                 -sm.product_uom_qty
-    #                               ELSE
-    #                                  sm.product_uom_qty
-    #                               END as move_quantity
-    #                             FROM stock_move sm WHERE sm.state NOT IN ('cancel', 'done') AND (sm.location_dest_id {0} {1} OR sm.location_id {0} {1}) ORDER BY sm.product_id, sm.date_expected
-    #                         ) temp1
-    #                     )
-    #                 ) temp2 WHERE cum_sum1 < 0
-    #                 )""".format(op, ids))
