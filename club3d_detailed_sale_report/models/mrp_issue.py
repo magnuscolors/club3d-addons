@@ -19,25 +19,31 @@ class StockMRPIssueWIZ(models.TransientModel):
 
         list_query = ("""                      
                   SELECT DISTINCT product_id FROM (		
-                        (SELECT id, product_id, date_expected,on_hand, move_quantity, SUM(move_quantity) OVER (PARTITION BY product_id ORDER BY date_expected, id)+on_hand AS cum_sum1 FROM 
+                        (SELECT id, product_id, date_expected, product_type, on_hand, move_quantity, SUM(move_quantity) OVER (PARTITION BY product_id ORDER BY date_expected, id)+on_hand AS cum_sum1 FROM 
                             (SELECT
                                 sm.id as id,
                                 sm.product_id as product_id,
                                 sm.date_expected as date_expected,
-                                (SELECT SUM(quantity) FROM stock_quant WHERE product_id = sm.product_id AND location_id {0} {1}) AS on_hand,
+                                (SELECT type FROM product_template WHERE id = (SELECT product_tmpl_id FROM product_product WHERE id = sm.product_id)) AS product_type,
+                                CASE
+                                  WHEN (SELECT SUM(quantity) FROM stock_quant WHERE product_id = sm.product_id AND location_id {0} {1}) IS NOT NULL
+                                  THEN
+                                    (SELECT SUM(quantity) FROM stock_quant WHERE product_id = sm.product_id AND location_id {0} {1})
+                                  ELSE
+                                     0
+                                  END AS on_hand,
                                 CASE
                                   WHEN (SELECT id FROM stock_location WHERE usage IN ('customer', 'inventory') AND id = sm.location_dest_id) IS NOT NULL
                                   THEN
                                     -sm.product_uom_qty
                                   ELSE
                                      sm.product_uom_qty
-                                  END as move_quantity
+                                  END AS move_quantity
                                 FROM stock_move sm WHERE sm.state NOT IN ('cancel', 'done') AND (sm.location_dest_id {0} {1} OR sm.location_id {0} {1}) ORDER BY sm.product_id, sm.date_expected
                             ) temp1
                         ) 
-                    ) temp2 WHERE cum_sum1 < 0
-            """.format(op, ids
-        ))
+                    ) temp2 WHERE cum_sum1 < 0 AND product_type = 'product'
+            """.format(op, ids))
 
         self.env.cr.execute(list_query)
         res = self.env.cr.fetchall()
