@@ -7,10 +7,13 @@
                 <div class="page" style="padding-left:25px;font-family: Open Sans, sans-serif;">
                     <div class="row" style="font-size:15px;">
                         <div name="invoice_address" class="col-xs-6">
-                            <t t-if="o.partner_id.parent_id and o.partner_id.parent_id.is_company">
-                                <!--<div><span t-field="o.partner_id.parent_id"/></div>-->
-                                <div><span>Company</span></div>
+                            <t t-if="o.partner_id.parent_id">
+                                <t t-if="o.partner_id.parent_id.is_company">
+                                    <div><span>Company</span></div>
+                                </t>
+                                <div><span t-field="o.partner_id.parent_id"/></div>
                             </t>
+
                             <t t-if="not o.partner_id.parent_id">
                                 <t t-if="o.partner_id and o.partner_id.is_company">
                                     <div><span>Company</span></div>
@@ -27,12 +30,15 @@
                             <div t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id) and o.type == 'out_invoice'">
                                 <br/>
                                 <strong>Ship-to address:</strong>
-                                <t t-if="o.partner_id.parent_id and o.partner_id.parent_id.is_company">
-                                    <div><span>Company</span></div>
+                                <t t-if="o.partner_id.parent_id">
+                                    <t t-if="o.partner_id.parent_id.is_company">
+                                        <div><span>Company</span></div>
+                                    </t>
+                                    <div><span t-field="o.partner_id.parent_id"/></div>
                                 </t>
                                 <div t-field="o.partner_shipping_id"
                                      t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
-                                    <div t-if="o.partner_id.parent_id"> <strong>Contact: </strong><span t-field="o.partner_shipping_id.name"/>
+                                    <div t-if="o.partner_shipping_id.parent_id"> <strong>Contact: </strong><span t-field="o.partner_shipping_id.name"/>
                                 </div>
                             </div>
                             <t t-if="o.payment_term_id or o.incoterms_id">

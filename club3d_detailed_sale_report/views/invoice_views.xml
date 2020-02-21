@@ -30,7 +30,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,pivot,graph</field>
             <field eval="False" name="view_id"/>
-            <field name="domain">[('invoice_type','=','out_invoice'), ('state', '!=', 'cancel')]</field>
+            <field name="domain">[('invoice_type','=','out_invoice')]</field>
             <field name="context">{'invoice_type':'out_invoice'}</field>
         </record>
 
