@@ -30,12 +30,17 @@
                             <div t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id) and o.type == 'out_invoice'">
                                 <br/>
                                 <strong>Ship-to address:</strong>
-                                <t t-if="o.partner_id.parent_id">
-                                    <t t-if="o.partner_id.parent_id.is_company">
+                                    <t t-if="o.partner_shipping_id.parent_id and o.partner_shipping_id.parent_id.is_company or o.partner_shipping_id.is_company">
                                         <div><span>Company</span></div>
                                     </t>
-                                    <div><span t-field="o.partner_id.parent_id"/></div>
-                                </t>
+                                    <div>
+                                        <t t-if="o.partner_shipping_id.parent_id">
+                                            <span t-field="o.partner_shipping_id.parent_id"/>
+                                        </t>
+                                        <t t-if="not o.partner_shipping_id.parent_id">
+                                            <span t-field="o.partner_shipping_id"/>
+                                        </t>
+                                    </div>
                                 <div t-field="o.partner_shipping_id"
                                      t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
                                     <div t-if="o.partner_shipping_id.parent_id"> <strong>Contact: </strong><span t-field="o.partner_shipping_id.name"/>
