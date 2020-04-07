@@ -114,4 +114,6 @@ class AccountInvoiceLine(models.Model):
             standard_price *= self.invoice_id.currency_id.rate
         if standard_price:
             vals.update({'purchase_price':standard_price})
+        if not 'uom_id' in vals:
+            vals.update({'uom_id':self.uom_id.id})
         return vals
