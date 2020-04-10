@@ -2,6 +2,20 @@
 
 from odoo import models, fields, api, _
 
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_domain(self):
+        data = {}
+        if self.partner_id:
+            invoice_add = [self.partner_id.id] + self.partner_id.search([('parent_id', '=', self.partner_id.id),('type', '=', 'invoice')]).ids
+            delivery_add = [self.partner_id.id] + self.partner_id.search([('parent_id', '=', self.partner_id.id), ('type', '=', 'delivery')]).ids
+            data = {'partner_invoice_id': [('id', 'in', invoice_add)],
+                    'partner_shipping_id': [('id', 'in', delivery_add)]}
+        return {'domain': data}
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
