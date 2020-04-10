@@ -13,11 +13,14 @@
                             </div>
                             <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
                             <div t-if="partner" name="partner_header">
-                                <t t-if="o.partner_id.parent_id">
+                                <t t-if="o.partner_id.parent_id and not o.partner_id.shipping_company_name">
                                     <div><span t-field="o.partner_id.parent_id"/></div>
                                 </t>
-                                <t t-if="not o.partner_id.parent_id">
+                                <t t-if="not o.partner_id.parent_id and not o.partner_id.shipping_company_name">
                                     <div><span t-field="o.partner_id"/></div>
+                                </t>
+                                <t t-if="o.partner_id.shipping_company_name">
+                                    <div><span t-field="o.partner_id.shipping_company_name"/></div>
                                 </t>
                                 <div t-esc="partner"
                                    t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True, "phone_icons": True}'/>
