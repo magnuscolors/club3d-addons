@@ -9,37 +9,39 @@
                         <div name="invoice_address" class="col-xs-6">
                             <t t-if="o.partner_id.parent_id">
                                 <t t-if="o.partner_id.parent_id.is_company">
-                                    <div><span>Company</span></div>
+                                    <div><span><strong>Buyer</strong></span></div>
                                 </t>
                                 <div><span t-field="o.partner_id.parent_id"/></div>
                             </t>
 
                             <t t-if="not o.partner_id.parent_id">
                                 <t t-if="o.partner_id and o.partner_id.is_company">
-                                    <div><span>Company</span></div>
+                                    <div><span><strong>Buyer</strong></span></div>
                                 </t>
                                 <div><span t-field="o.partner_id"/></div>
                             </t>
 
-                            <div t-field="o.partner_id"
-                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
+                            <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: True}"/>
                             <div t-if="o.partner_id.parent_id"> <strong>Contact: </strong><span t-field="o.partner_id.name"/> </div>
                             <!--<div t-if="o.partner_id.vat" class="mt16">
                                 <t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.partner_id.vat"/>
                             </div>-->
                             <div t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id) and o.type == 'out_invoice'">
                                 <br/>
-                                <strong>Ship-to address:</strong>
+                                <strong></strong>
                                     <t t-if="o.partner_shipping_id.parent_id and o.partner_shipping_id.parent_id.is_company or o.partner_shipping_id.is_company">
-                                        <div><span>Company</span></div>
+                                        <div><span><strong>Shipping address:</strong></span></div>
                                     </t>
                                     <div>
-                                        <t t-if="o.partner_shipping_id.parent_id">
+                                        <t t-if="o.partner_shipping_id.parent_id and not o.partner_shipping_id.shipping_company_name">
                                             <span t-field="o.partner_shipping_id.parent_id"/>
                                         </t>
-                                        <t t-if="not o.partner_shipping_id.parent_id">
+                                        <t t-if="not o.partner_id.parent_id and not o.partner_shipping_id.shipping_company_name">
                                             <span t-field="o.partner_shipping_id"/>
                                         </t>
+                                        <t t-if="o.partner_shipping_id.shipping_company_name">
+                                    <div><span t-field="o.partner_shipping_id.shipping_company_name"/></div>
+                                </t>
                                     </div>
                                 <div t-field="o.partner_shipping_id"
                                      t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />

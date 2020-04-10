@@ -9,7 +9,7 @@
                     <div class="row" name="customer_address" style="font-size:15px;">
                         <div class="col-xs-6">
                             <div>
-                                <span><strong>Delivery Address:</strong></span>
+                                <span><strong>Shipping Address:</strong></span>
                             </div>
                             <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
                             <div t-if="partner" name="partner_header">
