@@ -74,28 +74,6 @@ class StockMove(models.Model):
         else:
             return super(StockMove, self)._create_account_move_line(credit_account_id, debit_account_id, journal_id)
 
-    def _run_valuation(self, quantity=None):
-        res = super(StockMove, self)._run_valuation(quantity)
-        if self._is_out() and not self.value:
-            valued_move_lines = self.move_line_ids.filtered(lambda
-                                                                ml: ml.location_id._should_be_valued() and not ml.location_dest_id._should_be_valued() and not ml.owner_id)
-            valued_quantity = 0
-            for valued_move_line in valued_move_lines:
-                valued_quantity += valued_move_line.product_uom_id._compute_quantity(valued_move_line.qty_done,
-                                                                                     self.product_id.uom_id)
-            self.env['stock.move']._run_fifo(self, quantity=quantity)
-            if self.product_id.cost_method in ['standard', 'average']:
-                curr_rounding = self.company_id.currency_id.rounding
-                unit_price = self._get_price_unit()
-                value = -float_round(
-                    unit_price * (valued_quantity if quantity is None else quantity),
-                    precision_rounding=curr_rounding)
-                self.write({
-                    'value': value if quantity is None else self.value + value,
-                    'price_unit': value / valued_quantity,
-                })
-        return res
-
     def fetch_company_dependent_values(self):
         sudo_prop = self.env['ir.property'].sudo().with_context(force_company=self.company_id.id)
 
