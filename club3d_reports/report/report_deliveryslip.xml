@@ -9,15 +9,18 @@
                     <div class="row" name="customer_address" style="font-size:15px;">
                         <div class="col-xs-6">
                             <div>
-                                <span><strong>Delivery Address:</strong></span>
+                                <span><strong>Shipping Address:</strong></span>
                             </div>
                             <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
                             <div t-if="partner" name="partner_header">
-                                <t t-if="o.partner_id.parent_id">
+                                <t t-if="o.partner_id.parent_id and not o.partner_id.shipping_company_name">
                                     <div><span t-field="o.partner_id.parent_id"/></div>
                                 </t>
-                                <t t-if="not o.partner_id.parent_id">
+                                <t t-if="not o.partner_id.parent_id and not o.partner_id.shipping_company_name">
                                     <div><span t-field="o.partner_id"/></div>
+                                </t>
+                                <t t-if="o.partner_id.shipping_company_name">
+                                    <div><span t-field="o.partner_id.shipping_company_name"/></div>
                                 </t>
                                 <div t-esc="partner"
                                    t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True, "phone_icons": True}'/>
@@ -62,7 +65,7 @@
                             <div>Weights (gross/net) - Volumes - Selections</div>
                             <div>Net Weight&#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;<span t-field="o.weight"/> &#160; <span t-field="o.weight_uom_id"/> </div>
                             <div>Gross Weight&#160; &#160; &#160; &#160;  &#160; &#160;<span t-field="o.shipping_weight"/></div>
-                            <div>No. of Packages&#160; &#160;  &#160; &#160;<span t-field="o.number_of_packages"/></div>
+                            <div>No. of Packages&#160; &#160;  &#160; &#160;<span>.....</span></div>
                         </div>
                     </div>
                     <br/>

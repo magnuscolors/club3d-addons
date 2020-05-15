@@ -19,13 +19,14 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','product','stock'],
+    'depends': ['base','product','stock','delivery'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'data/freight_data.xml',
         'views/product_views.xml',
+        'views/stock_views.xml',
         'views/res_config_settings_views.xml',
     ],
     # only loaded in demonstration mode

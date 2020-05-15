@@ -45,3 +45,32 @@ class ProductSupplierinfo(models.Model):
                     result['arch'] = etree.tostring(partner_xml)
 
         return result
+
+
+
+class ProductProduct(models.Model):
+
+    _inherit = "product.product"
+
+    @api.multi
+    def name_get(self):
+        res = super(ProductProduct, self).name_get()
+
+        def _update_name_get(alist, key, value):
+            return [(k, v) if (k != key) else (key, value) for (k, v) in alist]
+
+        partner_id = self._context.get('partner_id')
+        if partner_id:
+            partner_ids = [partner_id, self.env['res.partner'].browse(partner_id).commercial_partner_id.id]
+        else:
+            partner_ids = []
+
+        product_template_ids = self.sudo().mapped('product_tmpl_id').ids
+        if partner_ids:
+            supplier_info = self.env['product.supplierinfo'].sudo().search([
+                ('product_tmpl_id', 'in', product_template_ids),
+                ('name', 'in', partner_ids),
+            ])
+            for product in supplier_info.mapped('product_tmpl_id').sudo():
+                res = _update_name_get(res, product.id,  '[%s] %s' % (product.default_code,product.name))
+        return res

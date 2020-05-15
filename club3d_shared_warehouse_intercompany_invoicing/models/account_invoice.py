@@ -60,7 +60,7 @@ class AccountInvoice(models.Model):
                                    'journal_id':po_journal_id.id,
                                    'account_id': po_account.id, 'invoice_line_ids':[],
                                     'tax_line_ids':[], 'fiscal_position_id' : fiscal_position,
-                                    'name':self.number or self.name})
+                                    'name':self.number or self.name, 'date_invoice':self.date_invoice})
 
                 new_lines = self.env['account.invoice.line']
                 for line in self.invoice_line_ids:
@@ -114,4 +114,6 @@ class AccountInvoiceLine(models.Model):
             standard_price *= self.invoice_id.currency_id.rate
         if standard_price:
             vals.update({'purchase_price':standard_price})
+        if 'uom_id' not in vals:
+            vals.update({'uom_id':self.uom_id.id})
         return vals

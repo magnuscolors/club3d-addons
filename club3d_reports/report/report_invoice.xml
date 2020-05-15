@@ -2,31 +2,52 @@
 <odoo>
     <data>
         <template id="report_invoice_document_club3d">
-            <t t-call="web.external_layout">
+            <t t-call="club3d_reports.commerical_invoice_external_layout">
                 <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
                 <div class="page" style="padding-left:25px;font-family: Open Sans, sans-serif;">
                     <div class="row" style="font-size:15px;">
                         <div name="invoice_address" class="col-xs-6">
                             <t t-if="o.partner_id.parent_id">
+                                <t t-if="o.partner_id.parent_id.is_company">
+                                    <div><span><strong>Buyer</strong></span></div>
+                                </t>
                                 <div><span t-field="o.partner_id.parent_id"/></div>
                             </t>
+
                             <t t-if="not o.partner_id.parent_id">
+                                <t t-if="o.partner_id and o.partner_id.is_company">
+                                    <div><span><strong>Buyer</strong></span></div>
+                                </t>
                                 <div><span t-field="o.partner_id"/></div>
                             </t>
 
-                            <div t-field="o.partner_id"
-                                t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
+                            <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;], &quot;no_marker&quot;: True}"/>
                             <div t-if="o.partner_id.parent_id"> <strong>Contact: </strong><span t-field="o.partner_id.name"/> </div>
                             <!--<div t-if="o.partner_id.vat" class="mt16">
                                 <t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.partner_id.vat"/>
                             </div>-->
-                            <!--<div t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id) and o.type == 'out_invoice'" groups="sale.group_delivery_invoice_address">
+                            <div t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id) and o.type == 'out_invoice'">
                                 <br/>
-                                <strong>Shipping address:</strong>
-                                <div t-field="o.partner_shipping_id.name"/>
+                                <strong></strong>
+                                    <t t-if="o.partner_shipping_id.parent_id and o.partner_shipping_id.parent_id.is_company or o.partner_shipping_id.is_company">
+                                        <div><span><strong>Shipping address:</strong></span></div>
+                                    </t>
+                                    <div>
+                                        <t t-if="o.partner_shipping_id.parent_id and not o.partner_shipping_id.shipping_company_name">
+                                            <span t-field="o.partner_shipping_id.parent_id"/>
+                                        </t>
+                                        <t t-if="not o.partner_id.parent_id and not o.partner_shipping_id.shipping_company_name">
+                                            <span t-field="o.partner_shipping_id"/>
+                                        </t>
+                                        <t t-if="o.partner_shipping_id.shipping_company_name">
+                                    <div><span t-field="o.partner_shipping_id.shipping_company_name"/></div>
+                                </t>
+                                    </div>
                                 <div t-field="o.partner_shipping_id"
-                                    t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
-                            </div>-->
+                                     t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
+                                    <div t-if="o.partner_shipping_id.parent_id"> <strong>Contact: </strong><span t-field="o.partner_shipping_id.name"/>
+                                </div>
+                            </div>
                             <t t-if="o.payment_term_id or o.incoterms_id">
                                 <div class="mt8">
                                      Requirements
@@ -65,7 +86,7 @@
                                         </t>
                                     </div>
                                     <t t-if="o.name" >
-                                        <div style="font-size:12px;">Reference/Date</div>
+                                        <div style="font-size:12px;">Reference</div>
                                         <div><span t-field="o.name"/></div>
                                     </t>
                                     <t t-if="sale_ids">

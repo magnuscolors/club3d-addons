@@ -29,6 +29,7 @@
         'views/invoice_views.xml',
         'views/stock_views.xml',
         'views/product_views.xml',
+        'views/stock_mrp_issue.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_stock_move_forecast_user,report.stock.move.forecast.user,model_report_stock_move_forecast,stock.group_stock_user,1,0,0,0
 access_stock_move_forecast_manager,report.stock.move.forecast.manager,model_report_stock_move_forecast,stock.group_stock_manager,1,1,1,1
+access_stock_mrp_issue_user,report.stock.mrp.issue.user,model_stock_mrp_issue,stock.group_stock_user,1,1,1,1
+access_sale_stock_mrp_issue_user,report.stock.mrp.issue.sale.user,model_stock_mrp_issue,sales_team.group_sale_salesman,1,1,1,1
